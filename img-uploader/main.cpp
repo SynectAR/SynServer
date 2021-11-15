@@ -1,23 +1,14 @@
 #include "mainwindow.h"
+#include <QIcon>
 #include <QApplication>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QHBoxLayout>
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-
-
-    //QLabel *label = new QLabel("Hello");
-    //label -> resize(400, 400);
-    //label -> show();
-
-
+    QApplication a(argc, argv);
     MainWindow w;
+    w.setWindowTitle("Image uploader");
+    w.setToolTip("Widget");
+    w.setWindowIcon(QIcon("icon.png"));
     w.show();
-    return app.exec();
+    return a.exec();
 }
-
-//запускаем все приложение и показываем его пользователю
