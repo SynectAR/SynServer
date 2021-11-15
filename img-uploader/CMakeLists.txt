@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(application VERSION 0.1 LANGUAGES CXX)
+project(img-uploader VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -19,40 +19,39 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        res.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(application
+    qt_add_executable(img-uploader
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET application APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET img-uploader APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(application SHARED
+        add_library(img-uploader SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(application
+        add_executable(img-uploader
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(application PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(img-uploader PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set_target_properties(application PROPERTIES
+set_target_properties(img-uploader PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(application)
+    qt_finalize_executable(img-uploader)
 endif()
