@@ -16,7 +16,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void showIp(QString ip);
+    void showServerState(QString state);
     void setConnected(QString peerIp);
     void setDisconnected();
 

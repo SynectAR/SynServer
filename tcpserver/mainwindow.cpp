@@ -7,17 +7,17 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    MyTcpServer *server = new MyTcpServer;
-    connect(server, SIGNAL(peerDisconnected()), this, SLOT(setDisconnected()));
-    connect(server, SIGNAL(peerConnected(QString)), this, SLOT(setConnected(QString)));
-    connect(server, SIGNAL(updateServerIp(QString)), this, SLOT(showIp(QString)));
+    MyTcpServer *server = new MyTcpServer(this);
+    connect(server, &MyTcpServer::peerDisconnected, this, &MainWindow::setDisconnected);
+    connect(server, &MyTcpServer::peerConnected, this, &MainWindow::setConnected);
+    connect(server, &MyTcpServer::updateServerState, this, &MainWindow::showServerState);
     server->startListening();
 }
 
-void MainWindow::showIp(QString ip)
+void MainWindow::showServerState(QString state)
 {
-    qDebug() << ip;
-    ui->ip_label->setText("server ip: " + ip);
+    qDebug() << state;
+    ui->ip_label->setText(state);
 }
 
 void MainWindow::setConnected(QString peerIp)

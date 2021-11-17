@@ -20,7 +20,7 @@ public slots:
     void sendPicture();
 
 signals:
-    void updateServerIp(QString);
+    void updateServerState(QString);
     void peerConnected(QString);
     void peerDisconnected();
 
