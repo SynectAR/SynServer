@@ -27,9 +27,8 @@ int main(int argc, char *argv[])
     ScpiSession client;
 
     QObject::connect(&client, &ScpiSession::deviceInfoChanged,
-                     [&engine](const QString& info)
-    {
-        auto* root = engine.rootObjects().first();
+                     [&engine](const QString &info) {
+        auto *root = engine.rootObjects().first();
         QQmlProperty nameProperty(root, "deviceInfo");
         nameProperty.write(info);
     });

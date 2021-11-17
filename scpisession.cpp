@@ -27,7 +27,8 @@ void ScpiSession::getDeviceInfo()
     {
         return;
     }
-    setDeviceInfo(_socket->readLine());
+    m_deviceInfo = _socket->readLine();
+    emit deviceInfoChanged(m_deviceInfo);
 }
 
 QString ScpiSession::deviceInfo() const

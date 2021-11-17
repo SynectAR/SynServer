@@ -19,11 +19,11 @@ public slots:
 
 signals:
     void connectedToHost();
-    void deviceInfoChanged(const QString &id);
+    void deviceInfoChanged(const QString &info);
 private:
     QString _host{"127.0.0.1"};
     quint16 _port {5025};
-    QTcpSocket* _socket;
+    QTcpSocket *_socket;
     uint _timeout {300};
 
     QString m_deviceInfo;

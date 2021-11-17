@@ -3,12 +3,13 @@ import QtQuick.Window 2.15
 
 Window {
     id: window
+
+    property string deviceInfo: ""
+
     width: 300
     height: 100
     visible: true
     title: qsTr("Hello World")
-
-    property string deviceInfo: ""
 
     Text {
         id: deviceId
