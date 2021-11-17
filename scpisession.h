@@ -7,26 +7,26 @@
 class ScpiSession : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString deviceInfo READ deviceInfo NOTIFY deviceInfoChanged)
 public:
     ScpiSession();
     ~ScpiSession();
-    void getId();
+    void getDeviceInfo();
 
-    QString id() const;
+    QString deviceInfo() const;
 
 public slots:
-    void setId(const QString &);
+
 signals:
     void connectedToHost();
-    void idChanged(const QString &id);
+    void deviceInfoChanged(const QString &id);
 private:
     QString _host{"127.0.0.1"};
     quint16 _port {5025};
     QTcpSocket* _socket;
     uint _timeout {300};
 
-    QString m_id;
+    QString m_deviceInfo;
 };
 
 #endif // SCPISESSION_H

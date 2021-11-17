@@ -8,8 +8,10 @@ Window {
     visible: true
     title: qsTr("Hello World")
 
+    property string deviceInfo: ""
+
     Text {
         id: deviceId
-        text: qsTr("Device id:") + tcpClient.id
+        text: qsTr("Device id: ") + window.deviceInfo
     }
 }

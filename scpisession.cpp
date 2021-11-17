@@ -20,26 +20,17 @@ ScpiSession::~ScpiSession()
     _socket->disconnectFromHost();
 }
 
-void ScpiSession::getId()
+void ScpiSession::getDeviceInfo()
 {
     _socket->write("*IDN?\n");
     if (!_socket->waitForReadyRead(_timeout))
     {
         return;
     }
-    setId(_socket->readLine());
+    setDeviceInfo(_socket->readLine());
 }
 
-QString ScpiSession::id() const
+QString ScpiSession::deviceInfo() const
 {
-    return m_id;
-}
-
-void ScpiSession::setId(const QString &id)
-{
-    if (m_id != id)
-    {
-        m_id = id;
-        emit idChanged(m_id);
-    }
+    return m_deviceInfo;
 }

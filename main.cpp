@@ -25,19 +25,15 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     ScpiSession client;
-    client.connectedToHost();
 
-    auto context = engine.rootContext();
-    context->setContextProperty("tcpClient", &client);
-
-   /* QObject::connect(&client, &TcpClient::nameChanged,
-                     [&engine](const QString& name)
+    QObject::connect(&client, &ScpiSession::deviceInfoChanged,
+                     [&engine](const QString& info)
     {
         auto* root = engine.rootObjects().first();
-        QQmlProperty nameProperty(root, "name");
-        nameProperty.write(name);
-    });*/
-    client.getId();
+        QQmlProperty nameProperty(root, "deviceInfo");
+        nameProperty.write(info);
+    });
+    client.getDeviceInfo();
 
     return app.exec();
 }
