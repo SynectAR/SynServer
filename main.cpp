@@ -1,5 +1,5 @@
 #include "scpisession.h"
-#include "scpisession.h"
+#include "server.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -24,12 +24,11 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    ScpiSession client;
+    MyTcpServer server;
+    server.startListening();
 
     auto context = engine.rootContext();
-    context->setContextProperty("client", &client);
-
-    client.getDeviceInfo();
+    context->setContextProperty("server", &server);
 
     return app.exec();
 }

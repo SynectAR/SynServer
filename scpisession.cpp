@@ -8,9 +8,9 @@ ScpiSession::ScpiSession()
 
     connect(_socket, &QAbstractSocket::stateChanged, this,
             [this](QAbstractSocket::SocketState s) {
-        if (s == QTcpSocket::ConnectedState)
-        {
+        if (s == QTcpSocket::ConnectedState) {
             emit connectedToHost();
+            getDeviceInfo();
         }
     });
 }
@@ -23,15 +23,13 @@ ScpiSession::~ScpiSession()
 void ScpiSession::getDeviceInfo()
 {
     _socket->write("*IDN?\n");
-    if (!_socket->waitForReadyRead(_timeout))
-    {
+    if (!_socket->waitForReadyRead(_timeout)) {
         return;
     }
-    m_deviceInfo = _socket->readLine();
-    emit deviceInfoChanged(m_deviceInfo);
+    _deviceInfo = _socket->readLine();
 }
 
 QString ScpiSession::deviceInfo() const
 {
-    return m_deviceInfo;
+    return _deviceInfo;
 }

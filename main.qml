@@ -11,6 +11,6 @@ Window {
 
     Text {
         id: deviceId
-        text: qsTr("Device id: ") + client.deviceInfo
+        text: qsTr("Device id: ") + server.deviceInfo
     }
 }
