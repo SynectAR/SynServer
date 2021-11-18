@@ -26,12 +26,9 @@ int main(int argc, char *argv[])
 
     ScpiSession client;
 
-    QObject::connect(&client, &ScpiSession::deviceInfoChanged,
-                     [&engine](const QString &info) {
-        auto *root = engine.rootObjects().first();
-        QQmlProperty nameProperty(root, "deviceInfo");
-        nameProperty.write(info);
-    });
+    auto context = engine.rootContext();
+    context->setContextProperty("client", &client);
+
     client.getDeviceInfo();
 
     return app.exec();

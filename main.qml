@@ -4,8 +4,6 @@ import QtQuick.Window 2.15
 Window {
     id: window
 
-    property string deviceInfo: ""
-
     width: 300
     height: 100
     visible: true
@@ -13,6 +11,6 @@ Window {
 
     Text {
         id: deviceId
-        text: qsTr("Device id: ") + window.deviceInfo
+        text: qsTr("Device id: ") + client.deviceInfo
     }
 }
