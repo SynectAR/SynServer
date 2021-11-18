@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include <QDebug>
 #include <QCoreApplication>
+#include <QNetworkInterface>
 #include <QImage>
 #include <QPixmap>
 #include <QBuffer>
@@ -16,13 +17,20 @@ void MyTcpServer::startListening()
 
     connect(mTcpServer, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
 
-    if(!mTcpServer->listen(QHostAddress::AnyIPv4, 8000)){
+    QString addressToListen;
+    for (auto &address : QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+            addressToListen = address.toString();
+        }
+    }
+
+    if(!mTcpServer->listen(QHostAddress(addressToListen), 8000)){
         qDebug() << "server is not started";
         emit updateServerState("server is not started");
     } else {
         qDebug() << "server is started " << mTcpServer->serverAddress().toString()
                  << mTcpServer->serverPort();
-        emit updateServerState("server is started on ip: " + mTcpServer->serverAddress().toString());
+        emit updateServerState("server ip: " + mTcpServer->serverAddress().toString());
     }
 }
 
