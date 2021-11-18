@@ -9,7 +9,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         scpisession.cpp \
-        vnamanager.cpp
+        server.cpp
 
 RESOURCES += qml.qrc
 
@@ -26,4 +26,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     scpisession.h \
-    vnamanager.h
+    server.h
