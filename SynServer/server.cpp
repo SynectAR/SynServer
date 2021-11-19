@@ -4,11 +4,11 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QImage>
+#include <QNetworkInterface>
 #include <QPixmap>
 
-MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
-    qDebug() << "device info: " << session.deviceInfo();
-}
+
+MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {}
 
 void MyTcpServer::startListening()
 {
@@ -16,13 +16,21 @@ void MyTcpServer::startListening()
 
     connect(mTcpServer, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
 
-    if(!mTcpServer->listen(QHostAddress::AnyIPv4, 8000)){
+    QString addressToListen;
+    for (auto &address : QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+            addressToListen = address.toString();
+        }
+    }
+    m_ip = addressToListen;
+
+    if(!mTcpServer->listen(QHostAddress(addressToListen), 8000)){
         qDebug() << "server is not started";
         emit updateServerState("server is not started");
     } else {
         qDebug() << "server is started " << mTcpServer->serverAddress().toString()
                  << mTcpServer->serverPort();
-        emit updateServerState("server is started on ip: " + mTcpServer->serverAddress().toString());
+        emit updateServerState("server ip: " + mTcpServer->serverAddress().toString());
         session.getDeviceInfo();
         m_deviceInfo = session.deviceInfo();
     }
@@ -31,6 +39,11 @@ void MyTcpServer::startListening()
 QString MyTcpServer::deviceInfo() const
 {
     return m_deviceInfo;
+}
+
+QString MyTcpServer::ip() const
+{
+    return m_ip;
 }
 
 void MyTcpServer::sendDeviceInfo()
@@ -63,7 +76,8 @@ void MyTcpServer::slotNewConnection()
 
 void MyTcpServer::slotServerRead()
 {
-    while (mTcpSocket->bytesAvailable() > 0) {
+    while(mTcpSocket->bytesAvailable()>0)
+    {
         QByteArray array = mTcpSocket->readAll();
         mTcpSocket->write(array);
     }

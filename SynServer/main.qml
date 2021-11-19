@@ -13,4 +13,9 @@ Window {
         id: deviceId
         text: qsTr("Device id: ") + server.deviceInfo
     }
+    Text {
+        id: ip
+        y: 15
+        text: qsTr("Server ip: ") + server.ip
+    }
 }
