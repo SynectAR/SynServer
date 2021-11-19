@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <QMenu>
+#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,10 +19,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images(*.png *.jpeg *.jpg *.bmp *.gif)"));
-
-        if(QString::compare(filename, QString()) != 0)
+    QImage image(filename);
+    //if(QString::compare(filename, QString()) != 0)
+    if(not filename.isNull())
         {
-            QImage image;
             bool valid = image.load((filename));
 
             if(valid)
@@ -34,4 +36,8 @@ void MainWindow::on_pushButton_clicked()
             }
         }
 }
+
+
+
+
 

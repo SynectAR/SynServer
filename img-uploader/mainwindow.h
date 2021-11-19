@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QApplication>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -14,6 +16,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void createMenu();
+    void createActions();
 
 private slots:
     void on_pushButton_clicked();
@@ -21,4 +25,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 };
+
+
+
 #endif // MAINWINDOW_H
