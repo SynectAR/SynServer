@@ -1,27 +1,27 @@
-#ifndef SCPISESSION_H
-#define SCPISESSION_H
+#ifndef SCPISOCKETSESSION_H
+#define SCPISOCKETSESSION_H
 
 #include <QObject>
 #include <QTcpSocket>
 
-class ScpiSession : public QObject
+class ScpiSocketSession : public QObject
 {
     Q_OBJECT
 public:
-    ScpiSession();
-    ~ScpiSession();
+    ScpiSocketSession();
+    ~ScpiSocketSession();
 
-    void getDeviceInfo();
     QString deviceInfo() const;
+
 signals:
     void connectedToHost();
+    void disconnectedFromHost();
+
 private:
     QString _host {"127.0.0.1"};
     quint16 _port {5025};
     QTcpSocket *_socket;
     uint _timeout {300};
-
-    QString _deviceInfo;
 };
 
-#endif // SCPISESSION_H
+#endif // SCPISOCKETSESSION_H

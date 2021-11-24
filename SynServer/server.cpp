@@ -22,33 +22,20 @@ void MyTcpServer::startListening()
             addressToListen = address.toString();
         }
     }
-    m_ip = addressToListen;
 
-    if(!mTcpServer->listen(QHostAddress(addressToListen), 8000)){
+    if (!mTcpServer->listen(QHostAddress(addressToListen), 8000)) {
         qDebug() << "server is not started";
         emit updateServerState("server is not started");
     } else {
         qDebug() << "server is started " << mTcpServer->serverAddress().toString()
                  << mTcpServer->serverPort();
         emit updateServerState("server ip: " + mTcpServer->serverAddress().toString());
-        session.getDeviceInfo();
-        m_deviceInfo = session.deviceInfo();
     }
 }
 
-QString MyTcpServer::deviceInfo() const
+void MyTcpServer::sendMessage(QString message) const
 {
-    return m_deviceInfo;
-}
-
-QString MyTcpServer::ip() const
-{
-    return m_ip;
-}
-
-void MyTcpServer::sendDeviceInfo()
-{
-    mTcpSocket->write(m_deviceInfo.toLocal8Bit());
+    mTcpSocket->write(message.toLocal8Bit());
 }
 
 void MyTcpServer::sendPicture()
@@ -68,16 +55,13 @@ void MyTcpServer::slotNewConnection()
     mTcpSocket = mTcpServer->nextPendingConnection();
     emit peerConnected(mTcpSocket->peerAddress().toString());
 
-    sendDeviceInfo();
-
     connect(mTcpSocket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(mTcpSocket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
 }
 
 void MyTcpServer::slotServerRead()
 {
-    while(mTcpSocket->bytesAvailable()>0)
-    {
+    while (mTcpSocket->bytesAvailable() > 0) {
         QByteArray array = mTcpSocket->readAll();
         mTcpSocket->write(array);
     }

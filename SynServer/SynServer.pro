@@ -8,7 +8,8 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        scpisession.cpp \
+        scpisocketsession.cpp \
+        scpisoltcalibrator.cpp \
         server.cpp
 
 RESOURCES += qml.qrc
@@ -25,5 +26,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    scpisession.h \
+    isoltcalibrator.h \
+    scpisocketsession.h \
+    scpisoltcalibrator.h \
     server.h

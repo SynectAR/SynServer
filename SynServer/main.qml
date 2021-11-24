@@ -11,11 +11,6 @@ Window {
 
     Text {
         id: deviceId
-        text: qsTr("Device id: ") + server.deviceInfo
-    }
-    Text {
-        id: ip
-        y: 15
-        text: qsTr("Server ip: ") + server.ip
+        text: qsTr("Device id: ") + calibrator.deviceInfo
     }
 }

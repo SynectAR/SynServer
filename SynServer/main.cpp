@@ -1,4 +1,4 @@
-#include "scpisession.h"
+#include "scpisoltcalibrator.h"
 #include "server.h"
 
 #include <QGuiApplication>
@@ -24,11 +24,18 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+    ScpiSoltCalibrator calibrator;
     MyTcpServer server;
+
+    QObject::connect(&server, &MyTcpServer::peerConnected,
+                     &server, [&server, &calibrator] () {
+       server.sendMessage(calibrator.deviceInfo());
+    });
+
     server.startListening();
 
     auto context = engine.rootContext();
-    context->setContextProperty("server", &server);
+    context->setContextProperty("calibrator", &calibrator);
 
     return app.exec();
 }
