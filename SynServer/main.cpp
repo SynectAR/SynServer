@@ -25,7 +25,9 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     ScpiSoltCalibrator calibrator;
-    MyTcpServer server;
+    ScpiSocketSession session;
+    auto test = session.calibrate();
+    /*MyTcpServer server;
 
     QObject::connect(&server, &MyTcpServer::peerConnected,
                      &server, [&server, &calibrator] () {
@@ -33,6 +35,7 @@ int main(int argc, char *argv[])
     });
 
     server.startListening();
+    */
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);

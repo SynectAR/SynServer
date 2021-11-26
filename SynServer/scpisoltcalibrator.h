@@ -10,7 +10,13 @@ class ScpiSoltCalibrator : public ISoltCalibrator
 public:
     ScpiSoltCalibrator();
 
+    void apply() const override;
     QString deviceInfo() const override;
+    int portCount() const override;
+    PortStatus portStatus(int) const override;
+    void measurePort(int, PortStatus::Gender, PortStatus::Type) const override;
+    void measureThru() const override;
+    void reset() const override;
 
 private:
     void getDeviceInfo();
