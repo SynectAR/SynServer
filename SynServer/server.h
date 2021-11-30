@@ -1,8 +1,6 @@
 #ifndef MYTCPSERVER_H
 #define MYTCPSERVER_H
 
-#include "scpisoltcalibrator.h"
-
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -29,8 +27,6 @@ signals:
 private:
     QTcpServer *mTcpServer;
     QTcpSocket *mTcpSocket;
-
-    QString _deviceInfo;
 };
 
 #endif // MYTCPSERVER_H
