@@ -4,11 +4,11 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QImage>
+#include <QNetworkInterface>
 #include <QPixmap>
 
-MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
-    qDebug() << "device info: " << session.deviceInfo();
-}
+
+MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {}
 
 void MyTcpServer::startListening()
 {
@@ -16,26 +16,26 @@ void MyTcpServer::startListening()
 
     connect(mTcpServer, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
 
-    if(!mTcpServer->listen(QHostAddress::AnyIPv4, 8000)){
+    QString addressToListen;
+    for (auto &address : QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+            addressToListen = address.toString();
+        }
+    }
+
+    if (!mTcpServer->listen(QHostAddress(addressToListen), 8000)) {
         qDebug() << "server is not started";
         emit updateServerState("server is not started");
     } else {
         qDebug() << "server is started " << mTcpServer->serverAddress().toString()
                  << mTcpServer->serverPort();
-        emit updateServerState("server is started on ip: " + mTcpServer->serverAddress().toString());
-        session.getDeviceInfo();
-        m_deviceInfo = session.deviceInfo();
+        emit updateServerState("server ip: " + mTcpServer->serverAddress().toString());
     }
 }
 
-QString MyTcpServer::deviceInfo() const
+void MyTcpServer::sendMessage(QString message) const
 {
-    return m_deviceInfo;
-}
-
-void MyTcpServer::sendDeviceInfo()
-{
-    mTcpSocket->write(m_deviceInfo.toLocal8Bit());
+    mTcpSocket->write(message.toLocal8Bit());
 }
 
 void MyTcpServer::sendPicture()
@@ -54,8 +54,6 @@ void MyTcpServer::slotNewConnection()
 {
     mTcpSocket = mTcpServer->nextPendingConnection();
     emit peerConnected(mTcpSocket->peerAddress().toString());
-
-    sendDeviceInfo();
 
     connect(mTcpSocket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(mTcpSocket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
