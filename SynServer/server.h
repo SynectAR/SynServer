@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include "mainwindow.h"
 
 class MyTcpServer : public QObject
 {
@@ -17,6 +16,7 @@ public slots:
     void slotNewConnection();
     void slotServerRead();
     void slotClientDisconnected();
+    void sendMessage(QString) const;
     void sendPicture();
 
 signals:
@@ -25,8 +25,8 @@ signals:
     void peerDisconnected();
 
 private:
-    QTcpServer * mTcpServer;
-    QTcpSocket * mTcpSocket;
+    QTcpServer *mTcpServer;
+    QTcpSocket *mTcpSocket;
 };
 
 #endif // MYTCPSERVER_H
