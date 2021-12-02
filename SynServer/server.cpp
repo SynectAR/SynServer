@@ -1,74 +1,101 @@
 #include "server.h"
 
-#include <QBuffer>
-#include <QCoreApplication>
-#include <QDebug>
-#include <QImage>
+#include <vnarpc.grpc.pb.h>
+#include <vnarpc.pb.h>
+
 #include <QNetworkInterface>
-#include <QPixmap>
+#include <QThread>
+#include <QtConcurrent/QtConcurrent>
+#include <QDebug>
 
+using grpc::ServerBuilder;
 
-MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {}
-
-void MyTcpServer::startListening()
+Status VnaRpcServiceImpl::getPortCount(grpc::ServerContext *context,
+                                             const vnarpc::EmptyMessage *request,
+                                             vnarpc::PortCount *reply)
 {
-    mTcpServer = new QTcpServer(this);
+    //PortCount
+    //int portcount
+    reply->set_portcount(120);
+    return Status::OK;
+}
 
-    connect(mTcpServer, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
+Status VnaRpcServiceImpl::getPortStatus(grpc::ServerContext *context,
+                                              const vnarpc::Port *request,
+                                              vnarpc::PortStatus *reply)
+{
+    //PortStatus
+    //reply:
+    //bool open
+    //bool short
+    //bool load
+    //bool gender
+    //request:
+    //int port
 
-    QString addressToListen;
-    for (auto &address : QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
-            addressToListen = address.toString();
+    return Status::OK;
+}
+
+Status VnaRpcServiceImpl::measurePort(grpc::ServerContext *context,
+                                            const vnarpc::MeasureParams *request,
+                                            vnarpc::EmptyMessage *reply)
+{
+    //MeasureParams
+    //int32 port
+    //string type
+    //bool gender
+    return Status::OK;
+}
+
+Status VnaRpcServiceImpl::measureThru(grpc::ServerContext *context,
+                                            const vnarpc::PortsPair *request,
+                                            vnarpc::EmptyMessage *reply)
+{
+    //PortsPair
+    //firstport
+    //secondport
+    return Status::OK;
+}
+
+Status VnaRpcServiceImpl::apply(grpc::ServerContext *context,
+                                      const vnarpc::EmptyMessage *request,
+                                      vnarpc::EmptyMessage *reply)
+{
+    return Status::OK;
+}
+
+Status VnaRpcServiceImpl::reset(grpc::ServerContext *context,
+                                      const vnarpc::EmptyMessage *request,
+                                      vnarpc::EmptyMessage *reply)
+{
+    return Status::OK;
+}
+
+namespace {
+    std::shared_ptr<Server> buildAndStartService(VnaRpcServiceImpl & service_)
+    {
+        QString serverAddress;
+        for (auto &address : QNetworkInterface::allAddresses()) {
+            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+                serverAddress = address.toString();
+            }
         }
-    }
-
-    if (!mTcpServer->listen(QHostAddress(addressToListen), 8000)) {
-        qDebug() << "server is not started";
-        emit updateServerState("server is not started");
-    } else {
-        qDebug() << "server is started " << mTcpServer->serverAddress().toString()
-                 << mTcpServer->serverPort();
-        emit updateServerState("server ip: " + mTcpServer->serverAddress().toString());
+        serverAddress += ":50051";
+        qDebug() << serverAddress;
+        return ServerBuilder()
+            .AddListeningPort(serverAddress.toStdString(), grpc::InsecureServerCredentials())
+            .RegisterService(&service_)
+            .BuildAndStart();
     }
 }
 
-void MyTcpServer::sendMessage(QString message) const
+RpcServer::RpcServer(QObject *parent)
+  : QObject(parent)
+  , server(buildAndStartService(this->service))
 {
-    mTcpSocket->write(message.toLocal8Bit());
-}
+    QtConcurrent::run([=] {
+        qDebug() << "RunServer() -> Thread: " << QThread::currentThreadId();
 
-void MyTcpServer::sendPicture()
-{
-    QImage image(":/qrc/images/2.png");
-    QByteArray bytes;
-    int size = static_cast<int>(image.sizeInBytes());
-    bytes.append(reinterpret_cast<char *>(&size), sizeof(size));
-    bytes.append((char *)image.bits(),image.sizeInBytes());
-    qDebug() << size << image.sizeInBytes() << bytes.size();
-    mTcpSocket->write(bytes);
-    qDebug() << bytes;
-}
-
-void MyTcpServer::slotNewConnection()
-{
-    mTcpSocket = mTcpServer->nextPendingConnection();
-    emit peerConnected(mTcpSocket->peerAddress().toString());
-
-    connect(mTcpSocket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
-    connect(mTcpSocket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
-}
-
-void MyTcpServer::slotServerRead()
-{
-    while (mTcpSocket->bytesAvailable() > 0) {
-        QByteArray array = mTcpSocket->readAll();
-        mTcpSocket->write(array);
-    }
-}
-
-void MyTcpServer::slotClientDisconnected()
-{
-    emit peerDisconnected();
-    mTcpSocket->close();
+        this->server->Wait();
+    });
 }

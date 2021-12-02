@@ -1,5 +1,6 @@
 #include "scpisoltcalibrator.h"
 #include "server.h"
+#include "rpcclient.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -25,14 +26,18 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     ScpiSoltCalibrator calibrator;
-    MyTcpServer server;
+//    MyTcpServer server;
 
-    QObject::connect(&server, &MyTcpServer::peerConnected,
-                     &server, [&server, &calibrator] () {
-       server.sendMessage(calibrator.deviceInfo());
-    });
+//    QObject::connect(&server, &MyTcpServer::peerConnected,
+//                     &server, [&server, &calibrator] () {
+//       server.sendMessage(calibrator.deviceInfo());
+//    });
 
-    server.startListening();
+//    server.startListening();
+    RpcServer server;
+    RpcClient client;
+    qDebug() << (int)client.getPortCount();
+
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);

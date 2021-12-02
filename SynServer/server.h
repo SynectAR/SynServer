@@ -1,32 +1,64 @@
-#ifndef MYTCPSERVER_H
-#define MYTCPSERVER_H
+#ifndef RPCSERVER_H
+#define RPCSERVER_H
 
 #include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
 
-class MyTcpServer : public QObject
+#include <grpcpp/grpcpp.h>
+
+#include <vnarpc.grpc.pb.h>
+#include <vnarpc.pb.h>
+
+//service
+using vnarpc::VnaRpc;
+
+//messages
+using vnarpc::EmptyMessage;
+using vnarpc::PortCount;
+using vnarpc::MeasureParams;
+using vnarpc::PortStatus;
+using vnarpc::PortsPair;
+using vnarpc::Port;
+
+//grpc status
+using grpc::Status;
+
+//grpc сервер и контекст сервера
+using grpc::ServerContext;
+using grpc::Server;
+
+
+class VnaRpcServiceImpl final : public VnaRpc::Service
 {
-    Q_OBJECT
-public:
-    explicit MyTcpServer(QObject *parent = 0);
-    void startListening();
-
-public slots:
-    void slotNewConnection();
-    void slotServerRead();
-    void slotClientDisconnected();
-    void sendMessage(QString) const;
-    void sendPicture();
-
-signals:
-    void updateServerState(QString);
-    void peerConnected(QString);
-    void peerDisconnected();
-
-private:
-    QTcpServer *mTcpServer;
-    QTcpSocket *mTcpSocket;
+    Status getPortCount(ServerContext* context,
+                        const EmptyMessage* request,
+                        PortCount* reply) override;
+    Status getPortStatus(ServerContext* context,
+                        const Port* request,
+                        PortStatus* reply) override;
+    Status measurePort(ServerContext* context,
+                        const MeasureParams* request,
+                        EmptyMessage* reply) override;
+    Status measureThru(ServerContext* context,
+                        const PortsPair* request,
+                        EmptyMessage* reply) override;
+    Status apply(ServerContext* context,
+                        const EmptyMessage* request,
+                        EmptyMessage* reply) override;
+    Status reset(ServerContext* context,
+                        const EmptyMessage* request,
+                        EmptyMessage* reply) override;
 };
 
-#endif // MYTCPSERVER_H
+class RpcServer : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit RpcServer(QObject *parent = nullptr);
+
+private:
+    VnaRpcServiceImpl service;
+    std::shared_ptr<Server> server;
+};
+
+#endif // RPCSERVER_H
