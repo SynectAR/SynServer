@@ -24,18 +24,25 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    ScpiSoltCalibrator calibrator;
-    ScpiSocketSession session;
-    auto test = session.calibrate();
-    /*MyTcpServer server;
+    MyTcpServer server;
+    server.startListening();
 
+    ScpiSoltCalibrator calibrator;
     QObject::connect(&server, &MyTcpServer::peerConnected,
                      &server, [&server, &calibrator] () {
        server.sendMessage(calibrator.deviceInfo());
     });
 
-    server.startListening();
-    */
+    calibrator.measurePort(Measure::OPEN, 1);
+    calibrator.measurePort(Measure::SHORT, 1);
+    calibrator.measurePort(Measure::LOAD, 1);
+
+    calibrator.measurePort(Measure::OPEN, 2);
+    calibrator.measurePort(Measure::SHORT, 2);
+    calibrator.measurePort(Measure::LOAD, 2);
+
+    calibrator.measureThru(1, 2);
+    calibrator.apply();
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);

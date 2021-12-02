@@ -11,15 +11,16 @@ public:
     ScpiSocketSession();
     ~ScpiSocketSession();
 
-    bool apply() const;
-    bool chooseCalibrationStandard() const;
-    bool calibrate() const;
+    void apply() const;
+    void chooseCalibrationKit(int kit) const;
+    void chooseCalibrationSubclass(int subclass) const;
     QString deviceInfo() const;
+    QString getSubclassGender(int subclass) const;
+    void measurePort(QString type, int port) const;
+    void measureThru(int rcvport, int srcport) const;
     int portCount() const;
-    QString measurePort(int port, QString type) const;
-    QString measureThru() const;
-    QString portStatus() const;
-    bool reset() const;
+    void reset() const;
+    void solt2Calibration(int port1, int port2) const;
 
 
 signals:
@@ -34,7 +35,7 @@ private:
     QString _host {"127.0.0.1"};
     quint16 _port {5025};
     QTcpSocket *_socket;
-    uint _timeout {1000};
+    uint _timeout {300};
 };
 
 #endif // SCPISOCKETSESSION_H
