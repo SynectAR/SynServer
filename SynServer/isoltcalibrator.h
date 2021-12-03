@@ -30,7 +30,7 @@ class ISoltCalibrator : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString deviceInfo READ deviceInfo NOTIFY deviceInfoChanged)
-    Q_PROPERTY(QString portCount READ portCount NOTIFY portCountChanged)
+    Q_PROPERTY(int portCount READ portCount NOTIFY portCountChanged)
 public:
     virtual ~ISoltCalibrator() = default;
 
