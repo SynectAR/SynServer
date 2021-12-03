@@ -29,13 +29,15 @@ private:
     void chooseCalibrationKit(int kit) const;
     void solt2Calibration(int port1, int port2) const;
 
+    void clearStatus(PortStatus& port);
+
 private:
     ScpiSocketSession _session;
 
     QString _deviceInfo;
     int _portCount;
 
-    QVector<Port> _ports;
+    QVector<PortStatus> _ports;
 
     QMap<QString, Gender> _gender {
         { "M", Gender::MALE },

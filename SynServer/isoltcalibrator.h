@@ -17,16 +17,6 @@ enum class Measure
     LOAD
 };
 
-struct Port {
-    Gender gender;
-    QMap<Measure, bool> measures {
-        { Measure::OPEN, false },
-        { Measure::SHORT, false },
-        { Measure::LOAD, false }
-    };
-};
-
-
 struct PortStatus
 {
     bool OPEN {false};

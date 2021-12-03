@@ -18,8 +18,7 @@ void ScpiSoltCalibrator::apply()
     _session.apply();
 
     for (auto& port: _ports)
-        for (auto& measure: port.measures)
-            measure = false;
+        clearStatus(port);
 }
 
 QString ScpiSoltCalibrator::deviceInfo() const
@@ -31,10 +30,22 @@ void ScpiSoltCalibrator::measurePort(Measure measure, int port)
 {
     if (port <= 0 || _portCount < port)
         return;
-    _session.chooseCalibrationSubclass(1);
 
+    _session.chooseCalibrationSubclass(1);
     _session.measurePort(_measureName[measure], port);
-    _ports[port - 1].measures[measure] = true;
+
+    switch (measure) {
+    case Measure::OPEN:
+        _ports[port - 1].OPEN = true;
+        break;
+    case Measure::SHORT:
+        _ports[port - 1].SHORT = true;
+        break;
+    case Measure::LOAD:
+        _ports[port -1].LOAD = true;
+        break;
+    }
+
 }
 
 void ScpiSoltCalibrator::measureThru(int srcport, int rcvport) const
@@ -57,13 +68,7 @@ PortStatus ScpiSoltCalibrator::portStatus(int port) const
     if (port <= 0 || _portCount < port)
         return {};
 
-    PortStatus status;
-    status.OPEN = _ports[port-1].measures[Measure::OPEN];
-    status.SHORT = _ports[port-1].measures[Measure::SHORT];
-    status.LOAD = _ports[port-1].measures[Measure::LOAD];
-    status.gender = _ports[port-1].gender;
-
-    return status;
+    return _ports[port - 1];
 }
 
 void ScpiSoltCalibrator::reset()
@@ -71,8 +76,7 @@ void ScpiSoltCalibrator::reset()
     _session.reset();
 
     for (auto& port: _ports)
-        for (auto& measure: port.measures)
-            measure = false;
+        clearStatus(port);
 }
 
 void ScpiSoltCalibrator::chooseCalibrationKit(int kit) const
@@ -80,6 +84,13 @@ void ScpiSoltCalibrator::chooseCalibrationKit(int kit) const
     if (kit <= 0 || 64 < kit)
         return;
     _session.chooseCalibrationKit(kit);
+}
+
+void ScpiSoltCalibrator::clearStatus(PortStatus &port)
+{
+    port.OPEN = false;
+    port.SHORT = false;
+    port.LOAD = false;
 }
 
 void ScpiSoltCalibrator::getDeviceInfo()
