@@ -76,6 +76,16 @@ int ScpiSocketSession::portCount() const
     return runQuery("SERV:PORT:COUN?\n").toInt();
 }
 
+QStringList ScpiSocketSession::readData() const
+{
+    return runQuery("CALC:DATA:FDAT?\n").split(',');
+}
+
+QStringList ScpiSocketSession::readFrequency() const
+{
+    return runQuery("SENS:FREQ:DATA?\n").split(',');
+}
+
 void ScpiSocketSession::reset() const
 {
     runCommand("SENS:CORR:COLL:CLE\n");

@@ -1,7 +1,7 @@
 #include "scpisoltcalibrator.h"
 #include "server.h"
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
                      &server, [&server, &calibrator] () {
        server.sendMessage(calibrator.deviceInfo());
     });
+
+    calibrator.vnaData();
 
     calibrator.measurePort(Measure::OPEN, 1);
     calibrator.measurePort(Measure::SHORT, 1);

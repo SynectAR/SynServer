@@ -6,7 +6,7 @@ ScpiSoltCalibrator::ScpiSoltCalibrator()
     getPortCount();
 
     _ports.resize(_portCount);
-    for (auto& port: _ports)
+    for (auto &port: _ports)
         port.gender = _gender[_session.getSubclassGender(1)];
 
     chooseCalibrationKit(1);
@@ -17,7 +17,7 @@ void ScpiSoltCalibrator::apply()
 {
     _session.apply();
 
-    for (auto& port: _ports)
+    for (auto &port: _ports)
         clearStatus(port);
 }
 
@@ -71,11 +71,28 @@ PortStatus ScpiSoltCalibrator::portStatus(int port) const
     return _ports[port - 1];
 }
 
+VnaData ScpiSoltCalibrator::vnaData() const
+{
+    VnaData vnaData;
+    auto data = _session.readData();
+    auto frequency = _session.readFrequency();
+
+    vnaData.data.reserve(data.size() / 2);
+    vnaData.frequency.reserve(data.size() / 2);
+
+    for (size_t i; i < data.size(); ++i) {
+        vnaData.data.push_back(data[2 * i].toDouble());
+        vnaData.frequency.push_back(data[2 * i].toDouble() / 1e9);
+    }
+
+    return vnaData;
+}
+
 void ScpiSoltCalibrator::reset()
 {
     _session.reset();
 
-    for (auto& port: _ports)
+    for (auto &port: _ports)
         clearStatus(port);
 }
 

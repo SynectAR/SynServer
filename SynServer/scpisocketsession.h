@@ -19,6 +19,8 @@ public:
     void measurePort(QString type, int port) const;
     void measureThru(int rcvport, int srcport) const;
     int portCount() const;
+    QStringList readData() const;
+    QStringList readFrequency() const;
     void reset() const;
     void solt2Calibration(int port1, int port2) const;
 
