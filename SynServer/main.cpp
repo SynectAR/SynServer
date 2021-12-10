@@ -1,3 +1,4 @@
+#include "chartcontrol.h"
 #include "scpisoltcalibrator.h"
 #include "server.h"
 
@@ -5,7 +6,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
-
+#include <QScopedPointer>
 
 int main(int argc, char *argv[])
 {
@@ -14,13 +15,15 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
+    QScopedPointer<ChartControl> chart;
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
+                     &app, [url, &chart](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
+
     }, Qt::QueuedConnection);
     engine.load(url);
 
@@ -29,25 +32,17 @@ int main(int argc, char *argv[])
 
     ScpiSoltCalibrator calibrator;
     QObject::connect(&server, &MyTcpServer::peerConnected,
-                     &server, [&server, &calibrator] () {
+                     [&server, &calibrator] () {
        server.sendMessage(calibrator.deviceInfo());
     });
 
-    calibrator.vnaData();
-
-    calibrator.measurePort(Measure::OPEN, 1);
-    calibrator.measurePort(Measure::SHORT, 1);
-    calibrator.measurePort(Measure::LOAD, 1);
-
-    calibrator.measurePort(Measure::OPEN, 2);
-    calibrator.measurePort(Measure::SHORT, 2);
-    calibrator.measurePort(Measure::LOAD, 2);
-
-    calibrator.measureThru(1, 2);
-    calibrator.apply();
-
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);
+
+    auto root = engine.rootObjects().first();
+    auto chartObject = root->findChild<QObject *>("chart");
+    chart.reset(new ChartControl(chartObject));
+    context->setContextProperty("chartControl", chart.get());
 
     return app.exec();
 }

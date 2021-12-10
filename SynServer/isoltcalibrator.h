@@ -26,6 +26,11 @@ struct PortStatus
     Gender gender;
 };
 
+struct VnaData {
+    QVector<double> data;
+    QVector<double> frequency;
+};
+
 class ISoltCalibrator : public QObject
 {
     Q_OBJECT
@@ -40,6 +45,7 @@ public:
     virtual void measureThru(int srcport, int rcvport) const = 0;
     virtual int portCount() const = 0;
     virtual PortStatus portStatus(int port) const = 0;
+    virtual VnaData vnaData() const = 0;
     virtual void reset() = 0;
 
 signals:

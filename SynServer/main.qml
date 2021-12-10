@@ -31,19 +31,13 @@ Window {
     ChartView {
         title: ""
         titleColor: "black"
+        objectName: "chart"
         anchors.fill: parent
         antialiasing: true
 
         LineSeries {
-            //name: ""
+            name: "lineSeries"
             color: "black"
-            XYPoint { x: 0; y: 0 }
-            XYPoint { x: 1.1; y: 2.1 }
-            XYPoint { x: 1.9; y: 3.3 }
-            XYPoint { x: 2.1; y: 2.1 }
-            XYPoint { x: 2.9; y: 4.9 }
-            XYPoint { x: 3.4; y: 3.0 }
-            XYPoint { x: 4.1; y: 3.3 }
 
         }
     }
@@ -51,12 +45,14 @@ Window {
     Button {
         x: 56
         y: 470
+        objectName: "vnaButton"
         anchors.left: parent
         //width: 100
         //height: 40
         font.pixelSize: 20
         checkable: true
         text: (checked ? "VNA enabled" : "VNA off")
+        onClicked: chartControl.updateData()
     }
 
 

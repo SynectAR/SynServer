@@ -74,15 +74,16 @@ PortStatus ScpiSoltCalibrator::portStatus(int port) const
 VnaData ScpiSoltCalibrator::vnaData() const
 {
     VnaData vnaData;
+    prepareDevice();
     auto data = _session.readData();
     auto frequency = _session.readFrequency();
 
     vnaData.data.reserve(data.size() / 2);
-    vnaData.frequency.reserve(data.size() / 2);
+    vnaData.frequency.reserve(frequency.size());
 
-    for (size_t i; i < data.size(); ++i) {
+    for (size_t i = 0; i < frequency.size(); ++i) {
         vnaData.data.push_back(data[2 * i].toDouble());
-        vnaData.frequency.push_back(data[2 * i].toDouble() / 1e9);
+        vnaData.frequency.push_back(frequency[i].toDouble() / 1e9);
     }
 
     return vnaData;
@@ -101,6 +102,17 @@ void ScpiSoltCalibrator::chooseCalibrationKit(int kit) const
     if (kit <= 0 || 64 < kit)
         return;
     _session.chooseCalibrationKit(kit);
+}
+
+void ScpiSoltCalibrator::prepareDevice() const
+{
+    _session.selectTraceParameter("S11");
+    _session.selectActiveTrace();
+    _session.setReadTraceFormat("MLOG");
+    _session.setMinFrequency(0);
+    _session.setMaxFrequency(9);
+    _session.setBandWidth(10'000);
+    _session.setPointNumber(201);
 }
 
 void ScpiSoltCalibrator::clearStatus(PortStatus &port)

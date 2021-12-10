@@ -22,6 +22,13 @@ public:
     QStringList readData() const;
     QStringList readFrequency() const;
     void reset() const;
+    void selectActiveTrace() const;
+    void selectTraceParameter(QString parameter) const;
+    void setMinFrequency(qreal minFrequency) const;
+    void setMaxFrequency(qreal maxFrequency) const;
+    void setBandWidth(uint bandWidth) const;
+    void setPointNumber(uint pointNumber) const;
+    void setReadTraceFormat(QString format) const;
     void solt2Calibration(int port1, int port2) const;
 
 
