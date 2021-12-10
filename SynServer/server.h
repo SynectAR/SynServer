@@ -8,6 +8,8 @@
 #include <vnarpc.grpc.pb.h>
 #include <vnarpc.pb.h>
 
+#include "tempsoltcalibrator.h"
+
 //service
 using vnarpc::VnaRpc;
 
@@ -15,7 +17,6 @@ using vnarpc::VnaRpc;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;
 using vnarpc::MeasureParams;
-using vnarpc::PortStatus;
 using vnarpc::PortsPair;
 using vnarpc::Port;
 
@@ -29,12 +30,18 @@ using grpc::Server;
 
 class VnaRpcServiceImpl final : public VnaRpc::Service
 {
+public:
+    VnaRpcServiceImpl(TempSoltCalibrator& calibrator);
+    TempSoltCalibrator* calibrator;
+
+private:
+
     Status getPortCount(ServerContext* context,
                         const EmptyMessage* request,
                         PortCount* reply) override;
     Status getPortStatus(ServerContext* context,
                         const Port* request,
-                        PortStatus* reply) override;
+                        vnarpc::PortStatus* reply) override;
     Status measurePort(ServerContext* context,
                         const MeasureParams* request,
                         EmptyMessage* reply) override;
@@ -54,10 +61,11 @@ class RpcServer : public QObject
     Q_OBJECT
 
 public:
-    explicit RpcServer(QObject *parent = nullptr);
+    RpcServer(TempSoltCalibrator& calibrator, QObject *parent = nullptr);
+    ~RpcServer();
 
 private:
-    VnaRpcServiceImpl service;
+    VnaRpcServiceImpl* service;
     std::shared_ptr<Server> server;
 };
 

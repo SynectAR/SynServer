@@ -25,22 +25,16 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    ScpiSoltCalibrator calibrator;
-//    MyTcpServer server;
-
-//    QObject::connect(&server, &MyTcpServer::peerConnected,
-//                     &server, [&server, &calibrator] () {
-//       server.sendMessage(calibrator.deviceInfo());
-//    });
-
-//    server.startListening();
-    RpcServer server;
+    TempSoltCalibrator calibrator;
+    RpcServer server(calibrator);
     RpcClient client;
-    qDebug() << (int)client.getPortCount();
+    client.measurePort("OPEN", 1);
+    client.measurePort("SHORT", 1);
+    client.getPortStatus(1);
 
 
-    auto context = engine.rootContext();
-    context->setContextProperty("calibrator", &calibrator);
+    //auto context = engine.rootContext();
+    //context->setContextProperty("calibrator", &calibrator);
 
     return app.exec();
 }

@@ -50,6 +50,8 @@ if(GRPC_AS_SUBMODULE)
   else()
     set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:grpc_cpp_plugin>)
   endif()
+
+
 elseif(GRPC_FETCHCONTENT)
   # Another way is to use CMake's FetchContent module to clone gRPC at
   # configure time. This makes gRPC's source code available to your project,
@@ -109,7 +111,6 @@ else()
   endif()
 endif()
 
-
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Network REQUIRED)
@@ -128,6 +129,8 @@ set(PROJECT_SOURCES
         qml.qrc
         rpcclient.cpp
         rpcclient.h
+        tempsoltcalibrator.h
+        tempsoltcalibrator.cpp
         # generated files
         vnarpc.grpc.pb.cc
         vnarpc.pb.cc

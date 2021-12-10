@@ -17,7 +17,6 @@ using grpc::Status;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;
 using vnarpc::MeasureParams;
-using vnarpc::PortStatus;
 using vnarpc::PortsPair;
 using vnarpc::VnaRpc;
 
@@ -29,7 +28,10 @@ Q_OBJECT
 public:
     RpcClient(QObject* parent_ = nullptr);
     int getPortCount();
+    void measurePort(std::string type, int port);
+    void apply();
     std::unique_ptr<VnaRpc::Stub> stub_;
+    void getPortStatus(int port);
 };
 
 #endif // RPCCLIENT_H

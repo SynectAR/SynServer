@@ -2,7 +2,7 @@
 #include <QDebug>
 
 #include <grpcpp/grpcpp.h>
-
+#include "tempsoltcalibrator.h"
 #include "rpcclient.h"
 #include "vnarpc.pb.h"
 
@@ -12,7 +12,6 @@ using grpc::Status;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;
 using vnarpc::MeasureParams;
-using vnarpc::PortStatus;
 using vnarpc::PortsPair;
 using vnarpc::VnaRpc;
 
@@ -32,5 +31,54 @@ int RpcClient::getPortCount()
     } else {
         qDebug() << (int)status.error_code();
         return -1;
+    }
+}
+
+void RpcClient::getPortStatus(int port)
+{
+    vnarpc::PortStatus reply;
+    ClientContext context;
+    vnarpc::Port request;
+    request.set_port(port);
+    Status status = stub_->getPortStatus(&context, request, &reply);
+
+    qDebug() << "status port" << port <<
+                "\nopen = " << reply.open() <<
+                "\nshort = " << reply.short_() <<
+                "\nload = " << reply.load();
+
+    if (status.ok()) {
+        qDebug() << "OK";
+    } else {
+        qDebug() << (int)status.error_code();
+    }
+}
+
+void RpcClient::measurePort(std::string type, int port)
+{
+    EmptyMessage reply;
+    ClientContext context;
+    MeasureParams request;
+    request.set_type(type);
+    request.set_port(port);
+    request.set_gender(1);
+    Status status = stub_->measurePort(&context, request, &reply);
+    if (status.ok()) {
+        qDebug() << "OK";
+    } else {
+        qDebug() << "error code " << (int)status.error_code();
+    }
+}
+
+void RpcClient::apply()
+{
+    EmptyMessage reply;
+    ClientContext context;
+    EmptyMessage request;
+    Status status = stub_->apply(&context, request, &reply);
+    if (status.ok()) {
+        qDebug() << "OK";
+    } else {
+        qDebug() << (int)status.error_code();
     }
 }
