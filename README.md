@@ -5,7 +5,7 @@
 
 <h3>Linux</h3>
 
-<h6>Установка зависимостей<h6>
+<h6>Установка зависимостей</h6>
 
 1. Открыть terminal.
 2. Перейти в директорию с проектом SynServer/SynServer.
@@ -13,9 +13,11 @@
 5. pip3 install conan==1.42.2
 6. conan install conanfile.txt
 
+В QT Creator собрать с помощью GCC
+
 <h3>Windows</h3>
 
-<h6>Установка зависимостей<h6>
+<h6>Установка зависимостей</h6>
 
 1. Установить pip https://pip.pypa.io/en/stable/installation/.
 2. Открыть cmd.
