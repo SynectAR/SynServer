@@ -11,7 +11,7 @@
 using grpc::ServerBuilder;
 
 
-VnaRpcServiceImpl::VnaRpcServiceImpl(TempSoltCalibrator& calibrator) : calibrator(&calibrator) {}
+VnaRpcServiceImpl::VnaRpcServiceImpl(ISoltCalibrator& calibrator) : calibrator(&calibrator) {}
 
 Status VnaRpcServiceImpl::getPortCount(grpc::ServerContext *context,
                                              const vnarpc::EmptyMessage *request,
@@ -127,7 +127,7 @@ namespace {
 }
 
 
-RpcServer::RpcServer(TempSoltCalibrator& calibrator, QObject *parent)
+RpcServer::RpcServer(ISoltCalibrator& calibrator, QObject *parent)
   : QObject(parent)
 {
     service = new VnaRpcServiceImpl(calibrator);

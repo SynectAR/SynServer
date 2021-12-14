@@ -1,6 +1,7 @@
 #include "scpisoltcalibrator.h"
 #include "server.h"
 #include "rpcclient.h"
+#include "tempsoltcalibrator.h"
 
 #include <QApplication>
 #include <QQmlApplicationEngine>

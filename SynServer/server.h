@@ -8,7 +8,7 @@
 #include <vnarpc.grpc.pb.h>
 #include <vnarpc.pb.h>
 
-#include "tempsoltcalibrator.h"
+#include "isoltcalibrator.h"
 
 //service
 using vnarpc::VnaRpc;
@@ -31,10 +31,10 @@ using grpc::Server;
 class VnaRpcServiceImpl final : public VnaRpc::Service
 {
 public:
-    VnaRpcServiceImpl(TempSoltCalibrator& calibrator);
-    TempSoltCalibrator* calibrator;
+    VnaRpcServiceImpl(ISoltCalibrator& calibrator);
 
 private:
+    ISoltCalibrator* calibrator;
 
     Status getPortCount(ServerContext* context,
                         const EmptyMessage* request,
@@ -61,7 +61,7 @@ class RpcServer : public QObject
     Q_OBJECT
 
 public:
-    RpcServer(TempSoltCalibrator& calibrator, QObject *parent = nullptr);
+    RpcServer(ISoltCalibrator& calibrator, QObject *parent = nullptr);
     ~RpcServer();
 
 private:
