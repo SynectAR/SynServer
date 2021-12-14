@@ -2,7 +2,7 @@
 #include "server.h"
 #include "rpcclient.h"
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -25,16 +25,12 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+
     TempSoltCalibrator calibrator;
     RpcServer server(calibrator);
-    RpcClient client;
-    client.measurePort("OPEN", 1);
-    client.measurePort("SHORT", 1);
-    client.getPortStatus(1);
 
-
-    //auto context = engine.rootContext();
-    //context->setContextProperty("calibrator", &calibrator);
+    auto context = engine.rootContext();
+    context->setContextProperty("calibrator", &calibrator);
 
     return app.exec();
 }

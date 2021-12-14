@@ -19,7 +19,6 @@ Status VnaRpcServiceImpl::getPortCount(grpc::ServerContext *context,
 {
     //PortCount
     //int portcount
-
     reply->set_portcount(calibrator->portCount());
     return Status::OK;
 }
@@ -78,15 +77,6 @@ Status VnaRpcServiceImpl::measurePort(grpc::ServerContext *context,
             break;
     }
 
-//    if (typeOfMeasure == "OPEN") {
-//        calibrator->measurePort(Measure::OPEN, port);
-//    } else if (typeOfMeasure == "SHORT") {
-//        calibrator->measurePort(Measure::SHORT, port);
-//    } else if (typeOfMeasure == "LOAD") {
-//        calibrator->measurePort(Measure::LOAD, port);
-//    } else {
-//        return Status::CANCELLED;
-//    }
     return Status::OK;
 }
 
