@@ -1,6 +1,5 @@
 #include "chartcontrol.h"
 
-#include "isoltcalibrator.h"
 #include "scpisoltcalibrator.h"
 
 #include <QAbstractSeries>
@@ -16,7 +15,7 @@ ChartControl::ChartControl(QObject *chart, QObject *parent) :
     QAbstractSeries *series {nullptr};
     bool f = QMetaObject::invokeMethod(_chart, "series",
             Q_RETURN_ARG(QAbstractSeries*, series),
-            Q_ARG(QString, "lineSeries"));
+            Q_ARG(QString, "S11"));
     Q_ASSERT(f && series);
     _series = qobject_cast<QLineSeries*>(series);
 
@@ -40,7 +39,6 @@ ChartControl::ChartControl(QObject *chart, QObject *parent) :
 // todo: Add data parameter
 void ChartControl::updateData()
 {
-    ScpiSoltCalibrator calibrator;
     VnaData data = calibrator.vnaData();
 
     QVector<QPointF> points;

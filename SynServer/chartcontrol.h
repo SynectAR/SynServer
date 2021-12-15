@@ -1,6 +1,8 @@
 #ifndef CHARTCONTROL_H
 #define CHARTCONTROL_H
 
+#include "scpisoltcalibrator.h"
+
 #include <QObject>
 
 namespace QtCharts {
@@ -23,6 +25,7 @@ private:
     QtCharts::QValueAxis *_axisX {nullptr};
     QtCharts::QValueAxis *_axisY {nullptr};
 
+    ScpiSoltCalibrator calibrator;
 };
 
 #endif // CHARTCONTROL_H

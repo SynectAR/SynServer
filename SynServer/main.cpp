@@ -16,11 +16,10 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    QScopedPointer<ChartControl> chart;
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url, &chart](QObject *obj, const QUrl &objUrl) {
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
 
@@ -41,8 +40,8 @@ int main(int argc, char *argv[])
 
     auto root = engine.rootObjects().first();
     auto chartObject = root->findChild<QObject *>("chart");
-    chart.reset(new ChartControl(chartObject));
-    context->setContextProperty("chartControl", chart.get());
+    auto *chart = new ChartControl(chartObject, &app);
+    context->setContextProperty("chartControl", chart);
 
     return app.exec();
 }
