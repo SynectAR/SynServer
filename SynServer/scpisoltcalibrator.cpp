@@ -6,11 +6,12 @@ ScpiSoltCalibrator::ScpiSoltCalibrator()
     getPortCount();
 
     _ports.resize(_portCount);
-    for (auto& port: _ports)
+    for (auto& port: _ports) {
         port.gender = _gender[_session.getSubclassGender(1)];
+        port.THRU.resize(_portCount);
+    }
 
     chooseCalibrationKit(1);
-    solt2Calibration(1, 2);
 }
 
 void ScpiSoltCalibrator::apply()
@@ -48,12 +49,16 @@ void ScpiSoltCalibrator::measurePort(Measure measure, int port)
 
 }
 
-void ScpiSoltCalibrator::measureThru(int srcport, int rcvport) const
+void ScpiSoltCalibrator::measureThru(int srcport, int rcvport)
 {
     if ((srcport <= 0 || _portCount < srcport)
        || (rcvport <= 0 || _portCount < rcvport)
        || (rcvport == srcport))
         return;
+
+    _ports[srcport - 1].THRU[rcvport - 1] = true;
+    _ports[rcvport - 1].THRU[srcport - 1] = true;
+
 
     _session.measureThru(srcport, rcvport);
 }
@@ -79,6 +84,16 @@ void ScpiSoltCalibrator::reset()
         clearStatus(port);
 }
 
+void ScpiSoltCalibrator::solt2Calibration(int port1, int port2) const
+{
+    if ((port1 <= 0 || _portCount < port1)
+       || (port2 <= 0 || _portCount < port2)
+       || (port1 == port2))
+        return;
+
+    _session.solt2Calibration(port1, port2);
+}
+
 void ScpiSoltCalibrator::chooseCalibrationKit(int kit) const
 {
     if (kit <= 0 || 64 < kit)
@@ -91,6 +106,7 @@ void ScpiSoltCalibrator::clearStatus(PortStatus &port)
     port.OPEN = false;
     port.SHORT = false;
     port.LOAD = false;
+    port.THRU.fill(false);
 }
 
 void ScpiSoltCalibrator::getDeviceInfo()
@@ -109,14 +125,4 @@ void ScpiSoltCalibrator::getPortCount()
         _portCount = newPortCount;
         emit ISoltCalibrator::portCountChanged(_portCount);
     }
-}
-
-void ScpiSoltCalibrator::solt2Calibration(int port1, int port2) const
-{
-    if ((port1 <= 0 || _portCount < port1)
-       || (port2 <= 0 || _portCount < port2)
-       || (port1 == port2))
-        return;
-
-    _session.solt2Calibration(port1, port2);
 }

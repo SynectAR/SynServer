@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
        server.sendMessage(calibrator.deviceInfo());
     });
 
+    calibrator.solt2Calibration(1, 2);
+
     calibrator.measurePort(Measure::OPEN, 1);
     calibrator.measurePort(Measure::SHORT, 1);
     calibrator.measurePort(Measure::LOAD, 1);
