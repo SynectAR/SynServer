@@ -8,6 +8,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        scpichannelinfo.cpp \
         scpisocketsession.cpp \
         scpisoltcalibrator.cpp \
         server.cpp
@@ -26,7 +27,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ichannelinfo.h \
     isoltcalibrator.h \
+    scpichannelinfo.h \
     scpisocketsession.h \
     scpisoltcalibrator.h \
     server.h

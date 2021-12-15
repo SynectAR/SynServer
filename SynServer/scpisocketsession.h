@@ -12,15 +12,21 @@ public:
     ~ScpiSocketSession();
 
     void apply() const;
+    double bandwidth() const;
     void chooseCalibrationKit(int kit) const;
     void chooseCalibrationSubclass(int subclass) const;
+    int channelCount() const;
     QString deviceInfo() const;
     QString getSubclassGender(int subclass) const;
     void measurePort(QString type, int port) const;
     void measureThru(int rcvport, int srcport) const;
     int portCount() const;
+    double power() const;
     void reset() const;
+    bool rfOut() const;
     void solt2Calibration(int port1, int port2) const;
+    int traceCount() const;
+    QString triggerSource() const;
 
 
 signals:

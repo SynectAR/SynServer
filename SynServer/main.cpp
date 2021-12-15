@@ -1,3 +1,4 @@
+#include "scpichannelinfo.h"
 #include "scpisoltcalibrator.h"
 #include "server.h"
 
@@ -33,18 +34,8 @@ int main(int argc, char *argv[])
        server.sendMessage(calibrator.deviceInfo());
     });
 
-    calibrator.solt2Calibration(1, 2);
-
-    calibrator.measurePort(Measure::OPEN, 1);
-    calibrator.measurePort(Measure::SHORT, 1);
-    calibrator.measurePort(Measure::LOAD, 1);
-
-    calibrator.measurePort(Measure::OPEN, 2);
-    calibrator.measurePort(Measure::SHORT, 2);
-    calibrator.measurePort(Measure::LOAD, 2);
-
-    calibrator.measureThru(1, 2);
-    calibrator.apply();
+    ScpiChannelInfo channelInfo;
+    auto test = channelInfo.triggerSource();
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);
