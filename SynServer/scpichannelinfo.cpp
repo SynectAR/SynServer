@@ -9,7 +9,7 @@ double ScpiChannelInfo::bandwidth() const
 
 int ScpiChannelInfo::channelCount() const
 {
-    return _session.channelCount();
+    return _layoutChannels[_session.channelLayout() - 1];
 }
 
 double ScpiChannelInfo::power() const

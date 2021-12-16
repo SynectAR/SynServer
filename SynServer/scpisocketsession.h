@@ -15,7 +15,7 @@ public:
     double bandwidth() const;
     void chooseCalibrationKit(int kit) const;
     void chooseCalibrationSubclass(int subclass) const;
-    int channelCount() const;
+    int channelLayout() const;
     QString deviceInfo() const;
     QString getSubclassGender(int subclass) const;
     void measurePort(QString type, int port) const;

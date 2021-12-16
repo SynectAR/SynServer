@@ -45,12 +45,9 @@ void ScpiSocketSession::chooseCalibrationSubclass(int subclass) const
     qDebug() << runQuery("SENS:CORR:COLL:SUBC?\n");
 }
 
-int ScpiSocketSession::channelCount() const
+int ScpiSocketSession::channelLayout() const
 {
-    // todo:
-    // "SERV:CHAN:COUN?\n" - maximum number if channels
-    // "DISP:SPL?\n" - returns channel window layout. It's necessary to get number of channel from layout number.
-    return 0;
+    return runQuery("DISP:SPL?\n").toInt();
 }
 
 QString ScpiSocketSession::deviceInfo() const
@@ -101,9 +98,7 @@ void ScpiSocketSession::reset() const
 
 bool ScpiSocketSession::rfOut() const
 {
-    // todo:
-    // "OUTP?\n"
-    return false;
+    return static_cast<bool>(runQuery("OUTP?\n").toInt());
 }
 
 void ScpiSocketSession::solt2Calibration(int port1, int port2) const
@@ -115,9 +110,7 @@ void ScpiSocketSession::solt2Calibration(int port1, int port2) const
 
 int ScpiSocketSession::traceCount() const
 {
-    // todo:
-    // "CALC:PAR:COUN?\n"
-    return 0;
+    return runQuery("CALC:PAR:COUN?\n").toInt();
 }
 
 QString ScpiSocketSession::triggerSource() const

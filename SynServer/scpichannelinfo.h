@@ -21,6 +21,9 @@ public:
 
 private:
     ScpiSocketSession _session;
+    int _layoutChannels[16] {
+        1, 2, 2, 3, 3, 3, 4, 4, 6, 6, 8, 8, 9, 12, 12, 16
+    };
     QMap<QString, TriggerSource> _triggerSources {
         { "INT", TriggerSource::INTERNAL },
         { "EXT", TriggerSource::EXTERNAL },
