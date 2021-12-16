@@ -27,12 +27,23 @@ public:
     bool rfOut() const override;
     SweepType sweepType() const override;
     int traceCount() const override;
+    TriggerScope triggerScope() const override;
     TriggerSource triggerSource() const override;
 
 private:
     ScpiSocketSession _session;
     int _layoutChannels[16] {
         1, 2, 2, 3, 3, 3, 4, 4, 6, 6, 8, 8, 9, 12, 12, 16
+    };
+    QMap<QString, SweepType> _sweepTypes {
+        { "LIN", SweepType::linear },
+        { "LOG", SweepType::logarithmic },
+        { "POW", SweepType::power },
+        { "SEGM", SweepType::segment }
+    };
+    QMap<QString, TriggerScope> _triggerScopes {
+        { "ACT", TriggerScope::active },
+        { "ALL", TriggerScope::all }
     };
     QMap<QString, TriggerSource> _triggerSources {
         { "INT", TriggerSource::internal },

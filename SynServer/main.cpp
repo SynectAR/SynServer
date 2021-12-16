@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
     });
 
     ScpiChannelInfo channelInfo;
-    auto test = channelInfo.rfOut();
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);

@@ -14,44 +14,37 @@ int ScpiChannelInfo::channelCount() const
 
 double ScpiChannelInfo::frequencyCenter() const
 {
-    // todo:
-    return 0;
+    return _session.frequencyCenter();
 }
 
 double ScpiChannelInfo::frequencySpan() const
 {
-    // todo:
-    return 0;
+    return _session.frequncySpan();
 }
 
 double ScpiChannelInfo::maxFrequency() const
 {
-    // todo:
-    return 0;
+    return _session.maxFrequency();
 }
 
 double ScpiChannelInfo::maxPower() const
 {
-    // todo:
-    return 0;
+    return _session.maxPower();
 }
 
 double ScpiChannelInfo::minFrequency() const
 {
-    // todo:
-    return 0;
+    return _session.minFrequency();
 }
 
 double ScpiChannelInfo::minPower() const
 {
-    // todo:
-    return 0;
+    return _session.minPower();
 }
 
 int ScpiChannelInfo::pointsCount() const
 {
-    // todo:
-    return 0;
+    return _session.pointsCount();
 }
 
 double ScpiChannelInfo::power() const
@@ -61,14 +54,12 @@ double ScpiChannelInfo::power() const
 
 double ScpiChannelInfo::powerCenter() const
 {
-    // todo:
-    return 0;
+    return _session.powerCenter();
 }
 
 double ScpiChannelInfo::powerSpan() const
 {
-    // todo:
-    return 0;
+    return _session.powerSpan();
 }
 
 bool ScpiChannelInfo::rfOut() const
@@ -78,13 +69,17 @@ bool ScpiChannelInfo::rfOut() const
 
 SweepType ScpiChannelInfo::sweepType() const
 {
-    // todo:
-    return SweepType::linear;
+    return _sweepTypes[_session.sweepType()];
 }
 
 int ScpiChannelInfo::traceCount() const
 {
     return _session.traceCount();
+}
+
+TriggerScope ScpiChannelInfo::triggerScope() const
+{
+    return _triggerScopes[_session.triggerScope()];
 }
 
 TriggerSource ScpiChannelInfo::triggerSource() const

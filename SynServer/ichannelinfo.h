@@ -11,6 +11,12 @@ enum class SweepType
     power
 };
 
+enum class TriggerScope
+{
+    all,
+    active
+};
+
 enum class TriggerSource
 {
     internal,
@@ -40,11 +46,8 @@ public:
     virtual bool rfOut() const = 0;
     virtual SweepType sweepType() const = 0;
     virtual int traceCount() const = 0;
+    virtual TriggerScope triggerScope() const = 0;
     virtual TriggerSource triggerSource() const = 0;
-
-
 };
-
-
 
 #endif // ICHANNELINFO_H
