@@ -7,8 +7,8 @@
 
 enum class Gender
 {
-    MALE,
-    FEMALE
+    male,
+    female
 };
 
 enum class Measure

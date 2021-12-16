@@ -14,9 +14,19 @@ public:
 
     double bandwidth() const override;
     int channelCount() const override;
+    double frequencyCenter() const override;
+    double frequencySpan() const override;
+    double maxFrequency() const override;
+    double maxPower() const override;
+    double minFrequency() const override;
+    double minPower() const override;
+    int pointsCount() const override;
     double power() const override;
+    double powerCenter() const override;
+    double powerSpan() const override;
     bool rfOut() const override;
-    int traceCount() const;
+    SweepType sweepType() const override;
+    int traceCount() const override;
     TriggerSource triggerSource() const override;
 
 private:
@@ -25,10 +35,10 @@ private:
         1, 2, 2, 3, 3, 3, 4, 4, 6, 6, 8, 8, 9, 12, 12, 16
     };
     QMap<QString, TriggerSource> _triggerSources {
-        { "INT", TriggerSource::INTERNAL },
-        { "EXT", TriggerSource::EXTERNAL },
-        { "BUS", TriggerSource::BUS },
-        { "MAN", TriggerSource::MANUAL }
+        { "INT", TriggerSource::internal },
+        { "EXT", TriggerSource::external },
+        { "BUS", TriggerSource::bus },
+        { "MAN", TriggerSource::manual }
     };
 };
 

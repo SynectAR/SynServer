@@ -40,8 +40,8 @@ private:
     QVector<PortStatus> _ports;
 
     QMap<QString, Gender> _gender {
-        { "M", Gender::MALE },
-        { "F", Gender::FEMALE }
+        { "M", Gender::male },
+        { "F", Gender::female }
     };
     QMap<Measure, QString> _measureName {
         { Measure::OPEN, "OPEN" },
