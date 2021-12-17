@@ -11,6 +11,7 @@ SOURCES += \
         scpichannelinfo.cpp \
         scpisocketsession.cpp \
         scpisoltcalibrator.cpp \
+        scpitraceinfo.cpp \
         server.cpp
 
 RESOURCES += qml.qrc
@@ -29,7 +30,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ichannelinfo.h \
     isoltcalibrator.h \
+    itraceinfo.h \
     scpichannelinfo.h \
     scpisocketsession.h \
     scpisoltcalibrator.h \
+    scpitraceinfo.h \
     server.h

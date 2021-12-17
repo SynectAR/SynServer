@@ -1,5 +1,6 @@
 #include "scpichannelinfo.h"
 #include "scpisoltcalibrator.h"
+#include "scpitraceinfo.h"
 #include "server.h"
 
 #include <QApplication>
@@ -34,7 +35,9 @@ int main(int argc, char *argv[])
        server.sendMessage(calibrator.deviceInfo());
     });
 
-    ScpiChannelInfo channelInfo;
+    ScpiChannelInfo info;
+    info.listPorts();
+
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);

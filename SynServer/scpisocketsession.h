@@ -17,6 +17,7 @@ public:
     void chooseCalibrationSubclass(int subclass) const;
     int channelLayout() const;
     QString deviceInfo() const;
+    QString format() const;
     double frequencyCenter() const;
     double frequncySpan() const;
     QString getSubclassGender(int subclass) const;
@@ -24,8 +25,10 @@ public:
     double maxPower() const;
     double minFrequency() const;
     double minPower() const;
+    QString measurementParameter(int trace) const;
     void measurePort(QString type, int port) const;
     void measureThru(int rcvport, int srcport) const;
+    int number() const;
     int pointsCount() const;
     int portCount() const;
     double power() const;
@@ -33,6 +36,7 @@ public:
     double powerSpan() const;
     void reset() const;
     bool rfOut() const;
+    double scale() const;
     void solt2Calibration(int port1, int port2) const;
     QString sweepType() const;
     int traceCount() const;

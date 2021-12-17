@@ -22,6 +22,33 @@ double ScpiChannelInfo::frequencySpan() const
     return _session.frequncySpan();
 }
 
+QVector<int> ScpiChannelInfo::listPorts() const
+{
+    QVector<int> ports;
+
+    QRegExp rx("(\\d+)");
+    for (size_t trace = 1; trace <= traceCount(); ++trace) {
+        auto parameter = _session.measurementParameter(trace);
+        bool split = parameter[0] == 'S';
+
+        int pos = 0;
+        while ((pos = rx.indexIn(parameter, pos)) != -1) {
+            auto port = rx.cap(1);
+            if (split) {
+                int leftDigits = port.size() / 2;
+                ports.push_back(port.left(leftDigits).toInt());
+                ports.push_back(port.right(port.size() - leftDigits).toInt());
+            } else {
+                ports.push_back(port.toInt());
+            }
+
+            pos += rx.matchedLength();
+        }
+    }
+
+    return ports;
+}
+
 double ScpiChannelInfo::maxFrequency() const
 {
     return _session.maxFrequency();
@@ -86,3 +113,13 @@ TriggerSource ScpiChannelInfo::triggerSource() const
 {
     return _triggerSources[_session.triggerSource()];
 }
+/*
+void ScpiChannelInfo::getBandwidth()
+{
+    int newBandwidth = _session.bandwidth();
+    if (m_bandwidth != newBandwidth) {
+        m_bandwidth = newBandwidth;
+        emit IChannelInfo::bandwidthChanged(m_bandwidth);
+    }
+}
+*/

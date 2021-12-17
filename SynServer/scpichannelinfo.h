@@ -16,6 +16,7 @@ public:
     int channelCount() const override;
     double frequencyCenter() const override;
     double frequencySpan() const override;
+    QVector<int> listPorts() const override;
     double maxFrequency() const override;
     double maxPower() const override;
     double minFrequency() const override;
@@ -29,7 +30,28 @@ public:
     int traceCount() const override;
     TriggerScope triggerScope() const override;
     TriggerSource triggerSource() const override;
+/*
+private:
+    void get();
 
+    void getBandwidth();
+    void getChannelCount();
+    void getFrequencyCenter();
+    void getFrequencySpan();
+    void getMaxFrequency();
+    void getMaxPower();
+    void getMinFrequency();
+    void getMinPower();
+    void getPointsCount();
+    void getPower();
+    void getPowerCenter();
+    void getPowerSpan();
+    void getRfOut();
+    void getSweepType();
+    void getTraceCount();
+    void getTriggerScope();
+    void getTriggerSource();
+*/
 private:
     ScpiSocketSession _session;
     int _layoutChannels[16] {

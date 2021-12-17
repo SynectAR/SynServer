@@ -52,6 +52,11 @@ QString ScpiSocketSession::deviceInfo() const
     return runQuery("*IDN?\n");
 }
 
+QString ScpiSocketSession::format() const
+{
+    return runQuery("CALC:FORM?\n").chopped(1);
+}
+
 double ScpiSocketSession::frequencyCenter() const
 {
     return runQuery("SENS:FREQ:CENT?\n").toDouble();
@@ -91,6 +96,12 @@ double ScpiSocketSession::minPower() const
     return runQuery("SENS:POW:STAR?\n").toDouble();
 }
 
+QString ScpiSocketSession::measurementParameter(int trace) const
+{
+    return runQuery(QString("CALC:PAR%1:DEF?\n")
+                    .arg(trace));
+}
+
 void ScpiSocketSession::measurePort(QString type, int port) const
 {
     runCommand(QString("SENS:CORR:COLL:%1 %2\n")
@@ -106,6 +117,11 @@ void ScpiSocketSession::measureThru(int rcvport, int srcport) const
     runCommand(QString("SENS:CORR:COLL:THRU %2,%1\n")
                .arg(rcvport)
                .arg(srcport));
+}
+
+int ScpiSocketSession::number() const
+{
+    return runQuery("SERV:CHAN:TRAC:ACT?\n").toInt();
 }
 
 int ScpiSocketSession::pointsCount() const
@@ -141,6 +157,11 @@ void ScpiSocketSession::reset() const
 bool ScpiSocketSession::rfOut() const
 {
     return static_cast<bool>(runQuery("OUTP?\n").toInt());
+}
+
+double ScpiSocketSession::scale() const
+{
+    return runQuery("DISP:WIND:TRAC:Y:PDIV?\n").toDouble();
 }
 
 void ScpiSocketSession::solt2Calibration(int port1, int port2) const
