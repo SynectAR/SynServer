@@ -23,6 +23,7 @@ public:
     double frequencyCenter() const;
     double frequncySpan() const;
     QString getSubclassGender(int subclass) const;
+    bool isTriggerContinuous() const;
     double maxFrequency() const;
     double maxPower() const;
     double minFrequency() const;

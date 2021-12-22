@@ -104,6 +104,14 @@ int ScpiChannelInfo::traceCount() const
     return _session.traceCount();
 }
 
+TriggerMode ScpiChannelInfo::triggerMode() const
+{
+    if (_session.isTriggerContinuous())
+        return TriggerMode::continuous;
+
+    return TriggerMode::hold;
+}
+
 TriggerScope ScpiChannelInfo::triggerScope() const
 {
     return _triggerScopes[_session.triggerScope()];

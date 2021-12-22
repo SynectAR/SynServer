@@ -28,30 +28,10 @@ public:
     bool rfOut() const override;
     SweepType sweepType() const override;
     int traceCount() const override;
+    TriggerMode triggerMode() const override;
     TriggerScope triggerScope() const override;
     TriggerSource triggerSource() const override;
-/*
-private:
-    void get();
 
-    void getBandwidth();
-    void getChannelCount();
-    void getFrequencyCenter();
-    void getFrequencySpan();
-    void getMaxFrequency();
-    void getMaxPower();
-    void getMinFrequency();
-    void getMinPower();
-    void getPointsCount();
-    void getPower();
-    void getPowerCenter();
-    void getPowerSpan();
-    void getRfOut();
-    void getSweepType();
-    void getTraceCount();
-    void getTriggerScope();
-    void getTriggerSource();
-*/
 private:
     ScpiSocketSession _session;
     int _layoutChannels[16] {

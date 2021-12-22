@@ -80,11 +80,13 @@ double ScpiSocketSession::frequncySpan() const
 
 QString ScpiSocketSession::getSubclassGender(int subclass) const
 {
-    //auto type = runQuery(QString("SENS:CORR:COLL:CKIT:STAN%1:TYPE?\n")
-    //                     .arg(subclass));
-    //auto label = runQuery(QString("SENS:CORR:COLL:CKIT:STAN%1:LAB?\n")
-    //                      .arg(subclass));
+    // todo: get from scpi
     return "M";
+}
+
+bool ScpiSocketSession::isTriggerContinuous() const
+{
+    return static_cast<bool>(runQuery("INIT:CONT?\n").toInt());
 }
 
 double ScpiSocketSession::maxFrequency() const
