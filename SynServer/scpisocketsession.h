@@ -13,10 +13,12 @@ public:
 
     void apply() const;
     double bandwidth() const;
+    void clear() const;
     void chooseCalibrationKit(int kit) const;
     void chooseCalibrationSubclass(int subclass) const;
     int channelLayout() const;
     QString deviceInfo() const;
+    int errorCode() const;
     QString format() const;
     double frequencyCenter() const;
     double frequncySpan() const;

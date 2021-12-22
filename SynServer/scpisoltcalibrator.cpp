@@ -32,8 +32,12 @@ void ScpiSoltCalibrator::measurePort(Measure measure, int port)
     if (port <= 0 || _portCount < port)
         return;
 
+    _session.clear();
     _session.chooseCalibrationSubclass(1);
     _session.measurePort(_measureName[measure], port);
+
+    if (_session.errorCode() != 0)
+        return;
 
     switch (measure) {
     case Measure::OPEN:
@@ -46,7 +50,6 @@ void ScpiSoltCalibrator::measurePort(Measure measure, int port)
         _ports[port -1].LOAD = true;
         break;
     }
-
 }
 
 void ScpiSoltCalibrator::measureThru(int srcport, int rcvport)

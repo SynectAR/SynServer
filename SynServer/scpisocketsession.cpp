@@ -30,6 +30,11 @@ double ScpiSocketSession::bandwidth() const
     return runQuery("SENS:BAND?\n").toDouble();
 }
 
+void ScpiSocketSession::clear() const
+{
+    runCommand("*CLS\n");
+}
+
 void ScpiSocketSession::chooseCalibrationKit(int kit) const
 {
     runCommand(QString("SENS:CORR:COLL:CKIT %1\n")
@@ -50,6 +55,12 @@ int ScpiSocketSession::channelLayout() const
 QString ScpiSocketSession::deviceInfo() const
 {
     return runQuery("*IDN?\n");
+}
+
+int ScpiSocketSession::errorCode() const
+{
+    auto errorMessage = runQuery("SYST:ERR?\n").split(',');
+    return errorMessage[0].mid(1).toInt();
 }
 
 QString ScpiSocketSession::format() const
@@ -148,6 +159,7 @@ double ScpiSocketSession::powerSpan() const
 {
     return runQuery("SENS:POW:SPAN?\n").toDouble();
 }
+
 
 void ScpiSocketSession::reset() const
 {

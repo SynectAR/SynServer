@@ -35,10 +35,6 @@ int main(int argc, char *argv[])
        server.sendMessage(calibrator.deviceInfo());
     });
 
-    ScpiChannelInfo info;
-    info.listPorts();
-
-
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);
 
