@@ -16,6 +16,7 @@ public:
     int channelCount() const override;
     double frequencyCenter() const override;
     double frequencySpan() const override;
+    bool isReady() const override;
     QVector<int> listPorts() const override;
     double maxFrequency() const override;
     double maxPower() const override;

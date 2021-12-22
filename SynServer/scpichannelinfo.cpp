@@ -22,6 +22,11 @@ double ScpiChannelInfo::frequencySpan() const
     return _session.frequncySpan();
 }
 
+bool ScpiChannelInfo::isReady() const
+{
+    return _session.isReady();
+}
+
 QVector<int> ScpiChannelInfo::listPorts() const
 {
     QVector<int> ports;

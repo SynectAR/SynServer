@@ -42,6 +42,7 @@ public:
     virtual int channelCount() const = 0;
     virtual double frequencyCenter() const = 0;
     virtual double frequencySpan() const = 0;
+    virtual bool isReady() const = 0;
     virtual QVector<int> listPorts() const = 0;
     virtual double maxFrequency() const = 0;
     virtual double maxPower() const = 0;

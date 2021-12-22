@@ -84,6 +84,11 @@ QString ScpiSocketSession::getSubclassGender(int subclass) const
     return "M";
 }
 
+bool ScpiSocketSession::isReady() const
+{
+    return static_cast<bool>(runQuery("SYST:READ?\n").toInt());
+}
+
 bool ScpiSocketSession::isTriggerContinuous() const
 {
     return static_cast<bool>(runQuery("INIT:CONT?\n").toInt());
