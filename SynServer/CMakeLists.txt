@@ -72,6 +72,7 @@ set(PROJECT_SOURCES
         scpisoltcalibrator.h
         server.h
         qml.qrc
+        images.qrc
         rpcclient.cpp
         rpcclient.h
         # generated files

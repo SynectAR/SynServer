@@ -8,7 +8,10 @@ TempSoltCalibrator::TempSoltCalibrator()
 void TempSoltCalibrator::apply()
 {
     for (auto i : ports) {
-        qDebug() << "\nopen = " << i.OPEN << "\nshort = " << i.SHORT << "\nload = " << i.LOAD << "\n";
+        qDebug() << "\nopen = " << i.OPEN
+                 << "\nshort = " << i.SHORT
+                 << "\nload = " << i.LOAD
+                 << "\n";
     }
 
 }
@@ -37,7 +40,7 @@ void TempSoltCalibrator::measureThru(int srcport, int rcvport) const
 
 int TempSoltCalibrator::portCount() const
 {
-    return 2;
+    return 60;
 }
 
 PortStatus TempSoltCalibrator::portStatus(int port) const

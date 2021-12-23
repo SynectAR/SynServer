@@ -1,5 +1,6 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include <QDebug>
+#include <QPixmap>
 
 #include <grpcpp/grpcpp.h>
 #include "tempsoltcalibrator.h"
@@ -8,6 +9,7 @@
 
 using grpc::Channel;
 using grpc::ClientContext;
+using grpc::ClientReader;
 using grpc::Status;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;

@@ -82,35 +82,6 @@ Window {
         y: 38
     }
 
-    /*Rectangle {
-        id: sas_VNA
-        width: myText_VNA.contentWidth + 40
-        height: 46
-        x: 73
-        y: 450
-        color: "white"
-        border.color: "black"
-
-        MouseArea {
-            id: myMouseArea_VNA
-            anchors.fill: parent
-            onClicked: parent.width = myText_SN.contentWidth
-        }
-
-
-        TextInput {
-            id: myText_VNA
-            anchors.centerIn: parent
-            font.family: "Helvetica"
-            text: qsTr("VNA")
-            focus: true
-            selectByMouse: true
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: false
-            signal qmlSignal(string msg)
-        }
-    }*/
-
     Rectangle {
         id: sas_SN
         width: myText_SN.contentWidth + 20
@@ -165,7 +136,7 @@ Window {
             font.family: "Helvetica"
             //font.pointSize:  50
             font.pixelSize: 20
-            text: qsTr("Введите IP адрес!")
+            text: qsTr(" ") + server.serverAddress
             focus: true;
             selectByMouse: true
 
@@ -175,10 +146,6 @@ Window {
             signal qmlSignal(string msg)
         }
     }
-
-    /*Button {
-        text: "VNA"
-    }*/
 }
 
 

@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include <QImage>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -32,6 +33,7 @@ public:
     void apply();
     std::unique_ptr<VnaRpc::Stub> stub_;
     void getPortStatus(int port);
+    QPixmap vnaQR();
 };
 
 #endif // RPCCLIENT_H

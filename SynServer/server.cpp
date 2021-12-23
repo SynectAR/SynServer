@@ -1,5 +1,7 @@
 #include "server.h"
 
+#include <QImage>
+#include <QPixmap>
 #include <vnarpc.grpc.pb.h>
 #include <vnarpc.pb.h>
 
@@ -108,25 +110,6 @@ Status VnaRpcServiceImpl::reset(grpc::ServerContext *context,
     return Status::OK;
 }
 
-namespace {
-    std::shared_ptr<Server> buildAndStartService(VnaRpcServiceImpl& service_)
-    {
-        QString serverAddress;
-        for (auto &address : QNetworkInterface::allAddresses()) {
-            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
-                serverAddress = address.toString();
-            }
-        }
-        serverAddress += ":50051";
-        qDebug() << serverAddress;
-        return ServerBuilder()
-            .AddListeningPort(serverAddress.toStdString(), grpc::InsecureServerCredentials())
-            .RegisterService(&service_)
-            .BuildAndStart();
-    }
-}
-
-
 RpcServer::RpcServer(ISoltCalibrator& calibrator, QObject *parent)
   : QObject(parent)
 {
@@ -139,7 +122,28 @@ RpcServer::RpcServer(ISoltCalibrator& calibrator, QObject *parent)
     });
 }
 
+std::shared_ptr<Server> RpcServer::buildAndStartService(VnaRpcServiceImpl& service_)
+{
+    for (auto &address : QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+            _serverAddress = address.toString();
+        }
+    }
+    _serverAddress += ":50051";
+    qDebug() << _serverAddress;
+    return ServerBuilder()
+        .AddListeningPort(_serverAddress.toStdString(), grpc::InsecureServerCredentials())
+        .RegisterService(&service_)
+        .BuildAndStart();
+}
+
+QString RpcServer::getServerAddress() const
+{
+    return _serverAddress;
+}
+
 RpcServer::~RpcServer()
 {
     delete service;
 }
+

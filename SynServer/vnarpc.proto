@@ -8,11 +8,54 @@ service VnaRpc {
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
     rpc measureThru (PortsPair) returns (EmptyMessage) {}
     rpc apply (EmptyMessage) returns (EmptyMessage) {}
-    rpc reset (EmptyMessage) returns (EmptyMessage) {} 
+    rpc reset (EmptyMessage) returns (EmptyMessage) {}
+    
+    // status methods
+    // частота канала минималььная максимальная 
+    //rpc frequency (VnaChannel) returns (Frequency) {}
+    // количество каналов
+    //rpc channelCount (EmptyMessage) returns (ChannelCount) {} 
+    // мощность 
+    //rpc power (VnaChannel) returns (Power) {}
+    // тригер
+    //rpc triggerSource (EmptyMessage) returns (TriggerSource) {}
+    //rpc triggerScope (EmptyMessage) returns (TriggerScope) {}
 }
 
+/*message TriggerSource {
+    enum Source {
+    	internal = 0;
+	external = 1;
+        manual = 2;
+        bus = 3;
+    }
+    Source source = 1;
+}
 
-message EmptyMessage {}
+message TriggerScope {
+    enum Scope {
+        all = 0; 
+        active = 1;
+    }
+    Scope scope = 1;
+}*/
+
+message Power {
+    string power = 1;
+}
+
+message VnaChannel {
+    int32 channel = 1;
+}
+
+message ChannelCount {
+    int32 channel_count = 1;
+}
+
+message Frequency {
+    string min = 1;
+    string max = 2;
+}
 
 message Port {
     int32 port = 1;
@@ -43,5 +86,6 @@ message PortCount {
     int32 portcount = 3;
 }
 
+message EmptyMessage {}
 //protoc vnarpc.proto --cpp_out=.
 //protoc vnarpc.proto --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin`

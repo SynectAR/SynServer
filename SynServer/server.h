@@ -26,6 +26,7 @@ using grpc::Status;
 //grpc сервер и контекст сервера
 using grpc::ServerContext;
 using grpc::Server;
+using grpc::ServerWriter;
 
 
 class VnaRpcServiceImpl final : public VnaRpc::Service
@@ -59,14 +60,21 @@ private:
 class RpcServer : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString serverAddress READ getServerAddress NOTIFY serverAddressChanged)
 
 public:
     RpcServer(ISoltCalibrator& calibrator, QObject *parent = nullptr);
     ~RpcServer();
+    QString getServerAddress() const;
 
 private:
+    QString _serverAddress;
     VnaRpcServiceImpl* service;
     std::shared_ptr<Server> server;
+    std::shared_ptr<Server> buildAndStartService(VnaRpcServiceImpl &service_);
+
+signals:
+    void serverAddressChanged(QString serverAddress);
 };
 
 #endif // RPCSERVER_H

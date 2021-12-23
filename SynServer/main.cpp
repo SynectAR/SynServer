@@ -7,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
+#include <QPixmap>
 
 
 int main(int argc, char *argv[])
@@ -24,14 +25,13 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
-    engine.load(url);
 
+    engine.load(url);
 
     TempSoltCalibrator calibrator;
     RpcServer server(calibrator);
-
     auto context = engine.rootContext();
+    context->setContextProperty("server", &server);
     context->setContextProperty("calibrator", &calibrator);
-
     return app.exec();
 }
