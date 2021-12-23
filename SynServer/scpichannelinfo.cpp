@@ -7,6 +7,11 @@ double ScpiChannelInfo::bandwidth() const
     return _session.bandwidth();
 }
 
+CalibrationType ScpiChannelInfo::calibrationType() const
+{
+    return _calibrationTypes[_session.calibrationType()];
+}
+
 int ScpiChannelInfo::channelCount() const
 {
     return _layoutChannels[_session.channelLayout() - 1];
@@ -126,13 +131,4 @@ TriggerSource ScpiChannelInfo::triggerSource() const
 {
     return _triggerSources[_session.triggerSource()];
 }
-/*
-void ScpiChannelInfo::getBandwidth()
-{
-    int newBandwidth = _session.bandwidth();
-    if (m_bandwidth != newBandwidth) {
-        m_bandwidth = newBandwidth;
-        emit IChannelInfo::bandwidthChanged(m_bandwidth);
-    }
-}
-*/
+

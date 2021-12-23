@@ -3,6 +3,17 @@
 
 #include <QObject>
 
+enum class CalibrationType
+{
+    respO,
+    respS,
+    respT,
+    solt1,
+    solt2,
+    onePath,
+    none
+};
+
 enum class SweepType
 {
     linear,
@@ -39,6 +50,7 @@ public:
     virtual ~IChannelInfo() = default;
 
     virtual double bandwidth() const = 0;
+    virtual CalibrationType calibrationType() const = 0;
     virtual int channelCount() const = 0;
     virtual double frequencyCenter() const = 0;
     virtual double frequencySpan() const = 0;

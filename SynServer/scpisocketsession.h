@@ -13,6 +13,7 @@ public:
 
     void apply() const;
     double bandwidth() const;
+    QString calibrationType() const;
     void clear() const;
     void chooseCalibrationKit(int kit) const;
     void chooseCalibrationSubclass(int subclass) const;
