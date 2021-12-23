@@ -23,7 +23,11 @@ service VnaRpc {
     // rfout 
     rpc rfOut (EmptyMessage) returns (State) {} 
     // откалиброван или нет 
-    
+    rpc calibrationType (EmptyMessage) returns (CalibrationType) {}
+}
+
+message CalibrationType {
+    string type = 1;
 }
 
 message Span {

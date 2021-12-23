@@ -83,6 +83,9 @@ private:
     Status rfOut(ServerContext* context,
                  const EmptyMessage* request,
                  vnarpc::State* reply) override;
+    Status calibrationType(ServerContext* context,
+                           const EmptyMessage* request,
+                           vnarpc::CalibrationType* reply) override;
 
 };
 

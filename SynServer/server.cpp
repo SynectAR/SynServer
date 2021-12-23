@@ -188,6 +188,28 @@ Status VnaRpcServiceImpl::rfOut(grpc::ServerContext *context,
     return Status::OK;
 }
 
+Status VnaRpcServiceImpl::calibrationType(grpc::ServerContext *context,
+                                          const vnarpc::EmptyMessage *request,
+                                          vnarpc::CalibrationType *reply)
+{
+    CalibrationType vnaCalType = channelInfo->calibrationType();
+    if (vnaCalType == CalibrationType::none)
+        reply->set_type("none");
+    else if (vnaCalType == CalibrationType::onePath)
+        reply->set_type("onePath");
+    else if (vnaCalType == CalibrationType::respO)
+        reply->set_type("respO");
+    else if (vnaCalType == CalibrationType::respS)
+        reply->set_type("respS");
+    else if (vnaCalType == CalibrationType::respT)
+        reply->set_type("respT");
+    else if (vnaCalType == CalibrationType::solt1)
+        reply->set_type("solt1");
+    else if (vnaCalType == CalibrationType::solt2)
+        reply->set_type("solt2");
+    return Status::OK;
+}
+
 RpcServer::RpcServer(ISoltCalibrator& calibrator, IChannelInfo& channelInfo, QObject *parent)
   : QObject(parent)
 {
