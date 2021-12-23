@@ -9,6 +9,7 @@
 #include <vnarpc.pb.h>
 
 #include "isoltcalibrator.h"
+#include "ichannelinfo.h"
 
 //service
 using vnarpc::VnaRpc;
@@ -19,6 +20,8 @@ using vnarpc::PortCount;
 using vnarpc::MeasureParams;
 using vnarpc::PortsPair;
 using vnarpc::Port;
+using vnarpc::State;
+using vnarpc::ConnectionState;
 
 //grpc status
 using grpc::Status;
@@ -32,11 +35,13 @@ using grpc::ServerWriter;
 class VnaRpcServiceImpl final : public VnaRpc::Service
 {
 public:
-    VnaRpcServiceImpl(ISoltCalibrator& calibrator);
+    VnaRpcServiceImpl(ISoltCalibrator& calibrator, IChannelInfo& channelInfo);
 
 private:
     ISoltCalibrator* calibrator;
+    IChannelInfo* channelInfo;
 
+    // калибровка
     Status getPortCount(ServerContext* context,
                         const EmptyMessage* request,
                         PortCount* reply) override;
@@ -55,6 +60,30 @@ private:
     Status reset(ServerContext* context,
                         const EmptyMessage* request,
                         EmptyMessage* reply) override;
+
+    // статус
+    Status isConnected(ServerContext* context,
+                       const EmptyMessage* request,
+                       ConnectionState* reply) override;
+    Status isReady(ServerContext* context,
+                   const EmptyMessage* request,
+                   State* reply) override;
+    Status sweepType(ServerContext* context,
+                     const EmptyMessage* request,
+                     vnarpc::SweepType* reply) override;
+    Status pointsCount(ServerContext* context,
+                       const EmptyMessage* request,
+                       vnarpc::Points* reply) override;
+    Status triggerMode(ServerContext* context,
+                       const EmptyMessage* request,
+                       vnarpc::TriggerMode* reply) override;
+    Status span(ServerContext* context,
+                const vnarpc::SweepType* request,
+                vnarpc::Span* reply) override;
+    Status rfOut(ServerContext* context,
+                 const EmptyMessage* request,
+                 vnarpc::State* reply) override;
+
 };
 
 class RpcServer : public QObject
@@ -63,7 +92,7 @@ class RpcServer : public QObject
     Q_PROPERTY(QString serverAddress READ getServerAddress NOTIFY serverAddressChanged)
 
 public:
-    RpcServer(ISoltCalibrator& calibrator, QObject *parent = nullptr);
+    RpcServer(ISoltCalibrator& calibrator, IChannelInfo& channelInfo, QObject *parent = nullptr);
     ~RpcServer();
     QString getServerAddress() const;
 

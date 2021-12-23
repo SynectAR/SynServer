@@ -34,6 +34,7 @@ public:
     std::unique_ptr<VnaRpc::Stub> stub_;
     void getPortStatus(int port);
     QPixmap vnaQR();
+    void span();
 };
 
 #endif // RPCCLIENT_H

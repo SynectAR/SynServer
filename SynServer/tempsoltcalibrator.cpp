@@ -33,7 +33,7 @@ void TempSoltCalibrator::measurePort(Measure measure, int port)
         }
 }
 
-void TempSoltCalibrator::measureThru(int srcport, int rcvport) const
+void TempSoltCalibrator::measureThru(int srcport, int rcvport)
 {
 
 }
@@ -49,6 +49,11 @@ PortStatus TempSoltCalibrator::portStatus(int port) const
 }
 
 void TempSoltCalibrator::reset()
+{
+
+}
+
+void TempSoltCalibrator::solt2Calibration(int port1, int port2) const
 {
 
 }

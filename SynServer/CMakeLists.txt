@@ -72,9 +72,14 @@ set(PROJECT_SOURCES
         scpisoltcalibrator.h
         server.h
         qml.qrc
-        images.qrc
         rpcclient.cpp
         rpcclient.h
+        scpichannelinfo.cpp
+        scpichannelinfo.h
+        ichannelinfo.h
+        itraceinfo.h
+        scpitraceinfo.cpp
+        scpitraceinfo.h
         # generated files
         vnarpc.grpc.pb.cc
         vnarpc.pb.cc

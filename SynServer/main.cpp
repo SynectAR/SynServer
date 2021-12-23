@@ -1,7 +1,10 @@
+#include "scpichannelinfo.h"
 #include "scpisoltcalibrator.h"
+#include "scpitraceinfo.h"
 #include "server.h"
 #include "rpcclient.h"
 #include "tempsoltcalibrator.h"
+#include "scpichannelinfo.h"
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
@@ -29,7 +32,9 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     TempSoltCalibrator calibrator;
-    RpcServer server(calibrator);
+    ScpiChannelInfo channelInfo;
+    RpcServer server(calibrator, channelInfo);
+
     auto context = engine.rootContext();
     context->setContextProperty("server", &server);
     context->setContextProperty("calibrator", &calibrator);
