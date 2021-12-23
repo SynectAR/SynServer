@@ -20,7 +20,6 @@ public:
     void measureThru(int rcvport, int srcport) const;
     int portCount() const;
     QStringList readData() const;
-    QStringList readFrequency() const;
     void reset() const;
     void selectActiveTrace() const;
     void selectTraceParameter(QString parameter) const;
@@ -44,7 +43,7 @@ private:
     QString _host {"127.0.0.1"};
     quint16 _port {5025};
     QTcpSocket *_socket;
-    uint _timeout {300};
+    uint _timeout {500};
 };
 
 #endif // SCPISOCKETSESSION_H

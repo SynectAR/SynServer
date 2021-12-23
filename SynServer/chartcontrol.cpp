@@ -34,18 +34,28 @@ ChartControl::ChartControl(QObject *chart, QObject *parent) :
     _axisX->setTitleText("Frequency");
     _axisX->setRange(1, 9);
     _axisX->setTickCount(9);
+
+    // todo: Get from SCPI
+    const auto minFrequency = 0;
+    const auto maxFrequency = 9;
+    const auto points = 201.0;
+    const auto delta = (maxFrequency - minFrequency) / points;
+
+    _frequency.reserve(points);
+    for (int i = 0; i < points; ++i) {
+        _frequency.push_back(i * delta);
+    }
 }
 
-// todo: Add data parameter
 void ChartControl::updateData()
 {
-    VnaData data = calibrator.vnaData();
+    QVector<double> data = _calibrator.vnaData();
 
     QVector<QPointF> points;
-    for (int i = 0; i < data.frequency.length(); i++) {
+    for (int i = 0; i < data.length(); ++i) {
         points.push_back({
-            data.frequency[i],
-            data.data[i]
+            _frequency[i],
+            data[i]
         });
     }
     _series->replace(points);

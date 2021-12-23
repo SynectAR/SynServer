@@ -25,7 +25,8 @@ private:
     QtCharts::QValueAxis *_axisX {nullptr};
     QtCharts::QValueAxis *_axisY {nullptr};
 
-    ScpiSoltCalibrator calibrator;
+    ScpiSoltCalibrator _calibrator;
+    QVector<double> _frequency;
 };
 
 #endif // CHARTCONTROL_H

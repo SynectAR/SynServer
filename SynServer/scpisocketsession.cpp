@@ -29,8 +29,6 @@ void ScpiSocketSession::chooseCalibrationKit(int kit) const
 {
     runCommand(QString("SENS:CORR:COLL:CKIT %1\n")
                .arg(kit));
-    qDebug() << "Kit description: " << runQuery("SENS:CORR:COLL:CKIT:DESC?\n");
-    qDebug() << "Kit label: " << runQuery("SENS:CORR:COLL:CKIT:LAB?\n");
 }
 
 void ScpiSocketSession::chooseCalibrationSubclass(int subclass) const
@@ -79,12 +77,9 @@ int ScpiSocketSession::portCount() const
 
 QStringList ScpiSocketSession::readData() const
 {
-    return runQuery("CALC:DATA:FDAT?\n").split(',');
-}
-
-QStringList ScpiSocketSession::readFrequency() const
-{
-    return runQuery("SENS:FREQ:DATA?\n").split(',');
+    auto data = runQuery("CALC:DATA:FDAT?\n");
+    runQuery("*OPC?\n");
+    return data.split(',');
 }
 
 void ScpiSocketSession::reset() const

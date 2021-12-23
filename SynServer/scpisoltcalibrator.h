@@ -20,7 +20,7 @@ public:
     void measureThru(int srcport, int rcvport) const override;
     int portCount() const override;
     PortStatus portStatus(int port) const override;
-    VnaData vnaData() const override;
+    QVector<double> vnaData() const override;
     void reset() override;
 
 private:

@@ -40,6 +40,16 @@ Window {
             color: "black"
 
         }
+
+       Timer {
+            id: refreshTimer
+            interval: 1 / 60 * 1000
+            running: true
+            repeat: true
+            onTriggered: {
+                chartControl.updateData();
+            }
+        }
     }
 
     Button {

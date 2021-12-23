@@ -11,6 +11,8 @@ ScpiSoltCalibrator::ScpiSoltCalibrator()
 
     chooseCalibrationKit(1);
     solt2Calibration(1, 2);
+
+    prepareDevice();
 }
 
 void ScpiSoltCalibrator::apply()
@@ -71,20 +73,15 @@ PortStatus ScpiSoltCalibrator::portStatus(int port) const
     return _ports[port - 1];
 }
 
-VnaData ScpiSoltCalibrator::vnaData() const
+QVector<double> ScpiSoltCalibrator::vnaData() const
 {
-    VnaData vnaData;
-    prepareDevice();
+    QVector<double> vnaData;
     auto data = _session.readData();
-    auto frequency = _session.readFrequency();
 
-    vnaData.data.reserve(data.size() / 2);
-    vnaData.frequency.reserve(frequency.size());
+    vnaData.reserve(data.size() / 2);
 
-    for (size_t i = 0; i < frequency.size(); ++i) {
-        vnaData.data.push_back(data[2 * i].toDouble());
-        vnaData.frequency.push_back(frequency[i].toDouble() / 1e9);
-    }
+    for (size_t i = 0; i < data.size(); i += 2)
+        vnaData.push_back(data[i].toDouble());
 
     return vnaData;
 }

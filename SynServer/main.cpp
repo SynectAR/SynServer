@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     server.startListening();
 
     ScpiSoltCalibrator calibrator;
+
     QObject::connect(&server, &MyTcpServer::peerConnected,
                      [&server, &calibrator] () {
        server.sendMessage(calibrator.deviceInfo());
