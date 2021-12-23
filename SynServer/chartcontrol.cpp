@@ -60,3 +60,8 @@ void ChartControl::updateData()
     }
     _series->replace(points);
 }
+
+void ChartControl::clear()
+{
+    _series->clear();
+}

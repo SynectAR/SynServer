@@ -44,7 +44,7 @@ Window {
        Timer {
             id: refreshTimer
             interval: 1 / 60 * 1000
-            running: true
+            running: false
             repeat: true
             onTriggered: {
                 chartControl.updateData();
@@ -59,8 +59,17 @@ Window {
         anchors.left: parent
         font.pixelSize: 20
         checkable: true
-        text: (checked ? "VNA enabled" : "VNA off")
-        onClicked: chartControl.updateData()
+        text: (checked ? "ON" : "OFF")
+        onClicked: {
+            if (checked) {
+                chartControl.updateData();
+                refreshTimer.running = true;
+            }
+            else {
+                chartControl.clear();
+                refreshTimer.running = false;
+            }
+        }
     }
 
     Text {

@@ -18,6 +18,7 @@ public:
 
 public slots:
     void updateData();
+    void clear();
 
 private:
     QObject *_chart {nullptr};
