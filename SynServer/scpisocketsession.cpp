@@ -30,6 +30,12 @@ double ScpiSocketSession::bandwidth() const
     return runQuery("SENS:BAND?\n").toDouble();
 }
 
+QString ScpiSocketSession::calibrationType() const
+{
+    const auto fullType = runQuery("SENS:CORR:TYPE?\n").chopped(1).split(',');
+    return fullType[0];
+}
+
 void ScpiSocketSession::clear() const
 {
     runCommand("*CLS\n");

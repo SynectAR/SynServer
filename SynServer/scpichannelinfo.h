@@ -13,6 +13,7 @@ public:
     ScpiChannelInfo();
 
     double bandwidth() const override;
+    CalibrationType calibrationType() const override;
     int channelCount() const override;
     double frequencyCenter() const override;
     double frequencySpan() const override;
@@ -37,6 +38,15 @@ private:
     ScpiSocketSession _session;
     int _layoutChannels[16] {
         1, 2, 2, 3, 3, 3, 4, 4, 6, 6, 8, 8, 9, 12, 12, 16
+    };
+    QMap<QString, CalibrationType> _calibrationTypes {
+        { "NONE",  CalibrationType::none },
+        { "1PATH",  CalibrationType::onePath },
+        { "RESPO",  CalibrationType::respO },
+        { "RESPS",  CalibrationType::respS },
+        { "RESPT",  CalibrationType::respT },
+        { "SOLT1",  CalibrationType::solt1 },
+        { "SOLT2",  CalibrationType::solt2 }
     };
     QMap<QString, SweepType> _sweepTypes {
         { "LIN", SweepType::linear },
