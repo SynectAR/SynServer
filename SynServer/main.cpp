@@ -79,8 +79,7 @@ int main(int argc, char *argv[])
 
     MyTcpServer server;
     server.startListening();
-
-    //ScpiSoltCalibrator calibrator;
+  
     QObject::connect(&server, &MyTcpServer::peerConnected,
                      &server, [&server, &calibrator] () {
         server.sendMessage(calibrator.deviceInfo());
