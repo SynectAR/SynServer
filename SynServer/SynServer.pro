@@ -9,6 +9,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         scpichannelinfo.cpp \
+        qrcodegen.cpp \
         scpisocketsession.cpp \
         scpisoltcalibrator.cpp \
         scpitraceinfo.cpp \
@@ -30,9 +31,20 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ichannelinfo.h \
     isoltcalibrator.h \
+    qrcodegen.hpp \
     itraceinfo.h \
     scpichannelinfo.h \
     scpisocketsession.h \
     scpisoltcalibrator.h \
     scpitraceinfo.h \
     server.h
+
+DISTFILES += \
+    QRcode1.qml \
+    mai1n.qml \
+    mai1n.qml
+
+
+DISTFILES += \
+    QRcode1.qml \
+    mai1n.qml

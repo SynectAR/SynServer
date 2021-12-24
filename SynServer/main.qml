@@ -1,19 +1,3 @@
-/*import QtQuick 2.15
-import QtQuick.Window 2.15
-
-Window {
-    id: window
-
-    width: 300
-    height: 100
-    visible: true
-    title: qsTr("Hello World")
-
-    Text {
-        id: deviceId
-        text: qsTr("Device id: ") + calibrator.deviceInfo
-    }
-}*/
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
@@ -21,164 +5,72 @@ import QtQuick.Controls.Styles 1.4
 import QtCharts 2.3
 import QtQuick.Layouts 1.15
 
+
 Window {
-    width: 833
-    height: 505
+    width: 1095
+    height: 680
     visible: true
-    //color: "black"
+    color: "black"
     title: qsTr("SynServer")
 
-    ChartView {
-        title: ""
-        titleColor: "black"
-        anchors.fill: parent
-        antialiasing: true
-
-        LineSeries {
-            //name: ""
-            color: "black"
-            XYPoint { x: 0; y: 0 }
-            XYPoint { x: 1.1; y: 2.1 }
-            XYPoint { x: 1.9; y: 3.3 }
-            XYPoint { x: 2.1; y: 2.1 }
-            XYPoint { x: 2.9; y: 4.9 }
-            XYPoint { x: 3.4; y: 3.0 }
-            XYPoint { x: 4.1; y: 3.3 }
-
-        }
-    }
-
-    Button {
-        x: 56
-        y: 470
-        anchors.left: parent
-        //width: 100
-        //height: 40
-        font.pixelSize: 20
-        checkable: true
-        text: (checked ? "VNA enabled" : "VNA off")
-    }
-
-
-    /*Button {
-        text: "VNA"
-        x: 73
-        y: 45
-    }*/
-
-    Text {
-        id: sas_1
-        font.pixelSize: 20
-        text: qsTr("IP")
-        x: 45
-        y: 38
-    }
-
-    Text {
-        id: sas_2_SN
-        font.pixelSize: 20
-        text: qsTr("SN")
-        x: 470
-        y: 38
-    }
-
-    /*Rectangle {
-        id: sas_VNA
-        width: myText_VNA.contentWidth + 40
-        height: 46
-        x: 73
-        y: 450
-        color: "white"
-        border.color: "black"
-
-        MouseArea {
-            id: myMouseArea_VNA
+    SwipeView {
+            id: swipeView
             anchors.fill: parent
-            onClicked: parent.width = myText_SN.contentWidth
+            currentIndex: tabBar.currentIndex
+
+            Rectangle {
+                Chart {
+                }
+            }
+
+            Rectangle {
+                QRcode {
+
+                }
+            }
         }
 
+        /*TabBar {
+            id: tabBar
+            currentIndex: swipeView.currentIndex
 
-        TextInput {
-            id: myText_VNA
-            anchors.centerIn: parent
-            font.family: "Helvetica"
-            text: qsTr("VNA")
-            focus: true
-            selectByMouse: true
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: false
-            signal qmlSignal(string msg)
+            TabButton {
+                x: 3000
+                y: 300
+                text: qsTr("Page 1")
+            }
+            TabButton {
+                text: qsTr("Page 2")
+            }
+        }*/
+
+    /*TabBar {
+        id: bar
+        width: parent.width
+        TabButton {
+            text: qsTr("Home")
         }
-    }*/
-
-    Rectangle {
-        id: sas_SN
-        width: myText_SN.contentWidth + 20
-        height: 46
-        x: 500
-        y: 26
-        color: "white"
-        border.color: "black"
-
-        MouseArea {
-            id: myMouseArea_SN
-            anchors.fill: parent
-            onClicked: parent.width = myText_SN.contentWidth
+        TabButton {
+            text: qsTr("Discover")
         }
-
-        TextInput {
-            id: myText_SN
-            anchors.centerIn: parent
-            font.family: "Helvetica"
-            font.pixelSize: 20
-            text: qsTr(" ") + calibrator.deviceInfo
-            focus: true;
-            selectByMouse: true
-
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: false
-
-            signal qmlSignal(string msg)
+        TabButton {
+            text: qsTr("Activity")
         }
     }
 
-    Rectangle {
-        id: sas_IP
-        width: myText.contentWidth + 20
-        height: 46
-        x: 73
-        y: 26
-        //left: 200
-        color: "white"
-        border.color: "black"
-        //anchors.left: parent
+    StackLayout {
+        width: parent.width
+        currentIndex: bar.currentIndex
 
-        MouseArea {
-            id: myMouseArea
-            anchors.fill: parent
-            onClicked: parent.width = myText.contentWidth
+        Item {
+            id: homeTab
         }
 
-        TextInput {
-            id: myText
-            anchors.centerIn: parent
-            font.family: "Helvetica"
-            //font.pointSize:  50
-            font.pixelSize: 20
-            text: qsTr("Введите IP адрес!")
-            focus: true;
-            selectByMouse: true
-
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: false
-
-            signal qmlSignal(string msg)
+        Item {
+            id: discoverTab
         }
-    }
-
-    /*Button {
-        text: "VNA"
+        Item {
+            id: activityTab
+        }
     }*/
 }
-
-
