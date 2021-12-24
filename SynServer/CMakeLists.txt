@@ -22,7 +22,7 @@ find_package(gRPC REQUIRED)
 
 ###
 #GENERATING
-###
+###я
 
 set(PB_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 set(PB_DIR "${CMAKE_SOURCE_DIR}")
@@ -58,6 +58,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Network REQUIRED)
 find_package(Qt5 COMPONENTS Qml REQUIRED)
+find_package(Qt5 COMPONENTS Charts REQUIRED)
 
 
 set(PROJECT_SOURCES
@@ -78,6 +79,8 @@ set(PROJECT_SOURCES
         scpichannelinfo.h
         ichannelinfo.h
         itraceinfo.h
+        chartcontrol.h
+        chartcontrol.cpp
         scpitraceinfo.cpp
         scpitraceinfo.h
         # generated files
@@ -113,6 +116,7 @@ endif()
 target_link_libraries(SynServer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     Qt5::Network
     Qt5::Qml
+    Qt5::Charts
     gRPC::gRPC
     protobuf::protobuf
     )

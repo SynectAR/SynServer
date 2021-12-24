@@ -42,6 +42,7 @@ public:
     virtual void measureThru(int srcport, int rcvport) = 0;
     virtual int portCount() const = 0;
     virtual PortStatus portStatus(int port) const = 0;
+    virtual QVector<double> vnaData() const = 0;
     virtual void reset() = 0;
     virtual void solt2Calibration(int port1, int port2) const = 0;
 

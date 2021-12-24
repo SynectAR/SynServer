@@ -20,6 +20,7 @@ public:
     void measureThru(int srcport, int rcvport) override;
     int portCount() const override;
     PortStatus portStatus(int port) const override;
+    QVector<double> vnaData() const override;
     void reset() override;
     void solt2Calibration(int port1, int port2) const override;
 
@@ -28,8 +29,9 @@ private:
     void getPortCount();
 
     void chooseCalibrationKit(int kit) const;
+    void prepareDevice() const;
 
-    void clearStatus(PortStatus& port);
+    void clearStatus(PortStatus &port);
 
 private:
     ScpiSocketSession _session;
