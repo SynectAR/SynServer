@@ -19,9 +19,7 @@ Window {
             currentIndex: tabBar.currentIndex
 
             Rectangle {
-                color: "teal"
                 Chart {
-                    backgroundColor: "teal"
                 }
             }
 

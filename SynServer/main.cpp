@@ -1,4 +1,6 @@
+#include "scpichannelinfo.h"
 #include "scpisoltcalibrator.h"
+#include "scpitraceinfo.h"
 #include "server.h"
 #include <qrcodegen.hpp>
 
@@ -84,17 +86,6 @@ int main(int argc, char *argv[])
                      &server, [&server, &calibrator] () {
         server.sendMessage(calibrator.deviceInfo());
     });
-
-    calibrator.measurePort(Measure::OPEN, 1);
-    calibrator.measurePort(Measure::SHORT, 1);
-    calibrator.measurePort(Measure::LOAD, 1);
-
-    calibrator.measurePort(Measure::OPEN, 2);
-    calibrator.measurePort(Measure::SHORT, 2);
-    calibrator.measurePort(Measure::LOAD, 2);
-
-    calibrator.measureThru(1, 2);
-    calibrator.apply();
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);

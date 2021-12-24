@@ -8,9 +8,11 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        scpichannelinfo.cpp \
         qrcodegen.cpp \
         scpisocketsession.cpp \
         scpisoltcalibrator.cpp \
+        scpitraceinfo.cpp \
         server.cpp
 
 RESOURCES += qml.qrc
@@ -27,10 +29,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ichannelinfo.h \
     isoltcalibrator.h \
     qrcodegen.hpp \
+    itraceinfo.h \
+    scpichannelinfo.h \
     scpisocketsession.h \
     scpisoltcalibrator.h \
+    scpitraceinfo.h \
     server.h
 
 DISTFILES += \
