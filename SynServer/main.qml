@@ -1,25 +1,53 @@
-/*import QtQuick 2.15
-import QtQuick.Window 2.15
-
-Window {
-    id: window
-
-    width: 300
-    height: 100
-    visible: true
-    title: qsTr("Hello World")
-
-    Text {
-        id: deviceId
-        text: qsTr("Device id: ") + calibrator.deviceInfo
-    }
-}*/
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 import QtCharts 2.3
 import QtQuick.Layouts 1.15
+
+
+Window {
+    width: 1095
+    height: 680
+    visible: true
+    color: "black"
+    title: qsTr("SynServer")
+
+    SwipeView {
+            id: swipeView
+            anchors.fill: parent
+            currentIndex: tabBar.currentIndex
+
+            Rectangle {
+                Chart {
+                }
+            }
+
+            Rectangle {
+                QRcode {
+
+                }
+            }
+        }
+
+    }
+
+    StackLayout {
+        width: parent.width
+        currentIndex: bar.currentIndex
+
+        Item {
+            id: homeTab
+        }
+
+        Item {
+            id: discoverTab
+        }
+        Item {
+            id: activityTab
+        }
+    }
+}
 
 Window {
     width: 833

@@ -3,11 +3,12 @@
 
 #include <QMap>
 #include <QObject>
+#include <QVector>
 
 enum class Gender
 {
-    MALE,
-    FEMALE
+    male,
+    female
 };
 
 enum class Measure
@@ -22,6 +23,7 @@ struct PortStatus
     bool OPEN {false};
     bool SHORT {false};
     bool LOAD {false};
+    QVector<bool> THRU;
 
     Gender gender;
 };
@@ -37,11 +39,12 @@ public:
     virtual void apply() = 0;
     virtual QString deviceInfo() const = 0;
     virtual void measurePort(Measure measure, int port) = 0;
-    virtual void measureThru(int srcport, int rcvport) const = 0;
+    virtual void measureThru(int srcport, int rcvport) = 0;
     virtual int portCount() const = 0;
     virtual PortStatus portStatus(int port) const = 0;
     virtual QVector<double> vnaData() const = 0;
     virtual void reset() = 0;
+    virtual void solt2Calibration(int port1, int port2) const = 0;
 
 signals:
     void deviceInfoChanged(QString deviceInfo);
