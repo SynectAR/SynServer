@@ -14,169 +14,19 @@ Window {
     title: qsTr("SynServer")
 
     SwipeView {
-            id: swipeView
-            anchors.fill: parent
-            currentIndex: tabBar.currentIndex
-
-            Rectangle {
-                Chart {
-                }
-            }
-
-            Rectangle {
-                QRcode {
-
-                }
-            }
-        }
-
-    }
-
-    StackLayout {
-        width: parent.width
-        currentIndex: bar.currentIndex
-
-        Item {
-            id: homeTab
-        }
-
-        Item {
-            id: discoverTab
-        }
-        Item {
-            id: activityTab
-        }
-    }
-}
-
-Window {
-    width: 833
-    height: 505
-    visible: true
-    title: qsTr("SynServer")
-
-    ChartView {
-        title: ""
-        titleColor: "black"
-        objectName: "chart"
+        id: swipeView
         anchors.fill: parent
-        antialiasing: true
+        currentIndex: tabBar.currentIndex
 
-        LineSeries {
-            objectName: "lineSeries"
-            name: "S11"
-            color: "black"
-
-        }
-
-       Timer {
-            id: refreshTimer
-            interval: 1 / 60 * 1000
-            running: false
-            repeat: true
-            onTriggered: {
-                chartControl.updateData();
+        Rectangle {
+            Chart {
+                objectName: "chart"
             }
         }
-    }
 
-    Button {
-        x: 56
-        y: 470
-        objectName: "vnaButton"
-        anchors.left: parent
-        font.pixelSize: 20
-        checkable: true
-        text: (checked ? "ON" : "OFF")
-        onClicked: {
-            if (checked) {
-                chartControl.updateData();
-                refreshTimer.running = true;
+        Rectangle {
+            QRcode {
             }
-            else {
-                chartControl.clear();
-                refreshTimer.running = false;
-            }
-        }
-    }
-
-    Text {
-        id: sas_1
-        font.pixelSize: 20
-        text: qsTr("IP")
-        x: 45
-        y: 38
-    }
-
-    Text {
-        id: sas_2_SN
-        font.pixelSize: 20
-        text: qsTr("SN")
-        x: 470
-        y: 38
-    }
-
-    Rectangle {
-        id: sas_SN
-        width: myText_SN.contentWidth + 20
-        height: 46
-        x: 500
-        y: 26
-        color: "white"
-        border.color: "black"
-
-        MouseArea {
-            id: myMouseArea_SN
-            anchors.fill: parent
-            onClicked: parent.width = myText_SN.contentWidth
-        }
-
-        TextInput {
-            id: myText_SN
-            anchors.centerIn: parent
-            font.family: "Helvetica"
-            font.pixelSize: 20
-            text: qsTr(" ") + calibrator.deviceInfo
-            focus: true;
-            selectByMouse: true
-
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: false
-
-            signal qmlSignal(string msg)
-        }
-    }
-
-    Rectangle {
-        id: sas_IP
-        width: myText.contentWidth + 20
-        height: 46
-        x: 73
-        y: 26
-        color: "white"
-        border.color: "black"
-
-        MouseArea {
-            id: myMouseArea
-            anchors.fill: parent
-            onClicked: parent.width = myText.contentWidth
-        }
-
-        TextInput {
-            id: myText
-            anchors.centerIn: parent
-            font.family: "Helvetica"
-            font.pixelSize: 20
-            text: qsTr("Введите IP адрес!")
-            focus: true;
-            selectByMouse: true
-
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: false
-
-            signal qmlSignal(string msg)
         }
     }
 }
-
-

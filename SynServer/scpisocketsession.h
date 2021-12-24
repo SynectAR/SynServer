@@ -36,9 +36,13 @@ public:
     int number() const;
     int pointsCount() const;
     int portCount() const;
-<<<<<<< HEAD
+    double power() const;
+    double powerCenter() const;
+    double powerSpan() const;
     QStringList readData() const;
     void reset() const;
+    bool rfOut() const;
+    double scale() const;
     void selectActiveTrace() const;
     void selectTraceParameter(QString parameter) const;
     void setMinFrequency(qreal minFrequency) const;
@@ -46,14 +50,6 @@ public:
     void setBandWidth(uint bandWidth) const;
     void setPointNumber(uint pointNumber) const;
     void setReadTraceFormat(QString format) const;
-=======
-    double power() const;
-    double powerCenter() const;
-    double powerSpan() const;
-    void reset() const;
-    bool rfOut() const;
-    double scale() const;
->>>>>>> origin/master
     void solt2Calibration(int port1, int port2) const;
     QString sweepType() const;
     int traceCount() const;

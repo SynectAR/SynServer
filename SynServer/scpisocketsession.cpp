@@ -36,11 +36,6 @@ QString ScpiSocketSession::calibrationType() const
     return fullType[0];
 }
 
-void ScpiSocketSession::clear() const
-{
-    runCommand("*CLS\n");
-}
-
 void ScpiSocketSession::chooseCalibrationKit(int kit) const
 {
     runCommand(QString("SENS:CORR:COLL:CKIT %1\n")
@@ -56,6 +51,11 @@ void ScpiSocketSession::chooseCalibrationSubclass(int subclass) const
 int ScpiSocketSession::channelLayout() const
 {
     return runQuery("DISP:SPL?\n").toInt();
+}
+
+void ScpiSocketSession::clear() const
+{
+    runCommand("*CLS\n");
 }
 
 QString ScpiSocketSession::deviceInfo() const
@@ -158,14 +158,6 @@ int ScpiSocketSession::portCount() const
     return runQuery("SERV:PORT:COUN?\n").toInt();
 }
 
-
-QStringList ScpiSocketSession::readData() const
-{
-    auto data = runQuery("CALC:DATA:FDAT?\n");
-    runQuery("*OPC?\n");
-    return data.split(',');
-}
-
 double ScpiSocketSession::power() const
 {
     return runQuery("SOUR:POW?\n").toDouble();
@@ -181,6 +173,12 @@ double ScpiSocketSession::powerSpan() const
     return runQuery("SENS:POW:SPAN?\n").toDouble();
 }
 
+QStringList ScpiSocketSession::readData() const
+{
+    auto data = runQuery("CALC:DATA:FDAT?\n");
+    runQuery("*OPC?\n");
+    return data.split(',');
+}
 
 void ScpiSocketSession::reset() const
 {
@@ -195,6 +193,8 @@ bool ScpiSocketSession::rfOut() const
 double ScpiSocketSession::scale() const
 {
     return runQuery("DISP:WIND:TRAC:Y:PDIV?\n").toDouble();
+}
+
 void ScpiSocketSession::selectActiveTrace() const
 {
     runCommand("CALC:PAR:SEL\n");
@@ -204,6 +204,13 @@ void ScpiSocketSession::selectTraceParameter(QString parameter) const
 {
     runCommand(QString("CALC:PAR:DEF %1\n").
                arg(parameter));
+}
+
+void ScpiSocketSession::setBandWidth(uint bandWidth) const
+{
+    runCommand(QString("SENS:BWID %1\n")
+               .arg(bandWidth)
+               .toUtf8());
 }
 
 void ScpiSocketSession::setMinFrequency(qreal minFrequency) const
@@ -217,13 +224,6 @@ void ScpiSocketSession::setMaxFrequency(qreal maxFrequency) const
 {
     runCommand(QString("SENS:FREQ:STOP %1GHZ\n")
                .arg(maxFrequency)
-               .toUtf8());
-}
-
-void ScpiSocketSession::setBandWidth(uint bandWidth) const
-{
-    runCommand(QString("SENS:BWID %1\n")
-               .arg(bandWidth)
                .toUtf8());
 }
 

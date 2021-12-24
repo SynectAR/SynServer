@@ -30,7 +30,6 @@ private:
 
     void chooseCalibrationKit(int kit) const;
     void prepareDevice() const;
-    void solt2Calibration(int port1, int port2) const;
 
     void clearStatus(PortStatus &port);
 
