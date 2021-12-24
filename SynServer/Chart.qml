@@ -6,20 +6,24 @@ import QtCharts 2.3
 import QtQuick.Layouts 1.15
 
 ChartView {
-    //title: "Spline"
     anchors.fill: parent
     antialiasing: true
 
-    SplineSeries {
-        //name: "SplineSeries"
-        XYPoint { x: 0; y: 0.0 }
-        XYPoint { x: 1.1; y: 3.2 }
-        XYPoint { x: 1.9; y: 2.4 }
-        XYPoint { x: 2.1; y: 2.1 }
-        XYPoint { x: 2.9; y: 2.6 }
-        XYPoint { x: 3.4; y: 2.3 }
-        XYPoint { x: 4.1; y: 3.1 }
+    LineSeries {
+        objectName: "series"
+        name: "S11"
+        color: "black"
     }
+
+    Timer {
+         id: refreshTimer
+         interval: 1 / 60 * 1000
+         running: false
+         repeat: true
+         onTriggered: {
+             chartControl.updateData();
+         }
+     }
 
     ColumnLayout {
         anchors.fill: parent
@@ -32,89 +36,86 @@ ChartView {
                 font.pixelSize: 20
                 checkable: true
                 text: (checked ? "VNA on" : "VNA off")
+                onClicked: {
+                    if (checked) {
+                        chartControl.updateData();
+                        refreshTimer.running = true;
+                    }
+                    else {
+                        chartControl.clear();
+                        refreshTimer.running = false;
+                    }
+                }
             }
         }
     }
 
-        id: rootWindow;
-        visible: true
-        width: 200
-        height: 200
-        Rectangle{
-            id: redRect;
-            color: "white";
-            border.color: "black"
-            anchors.margins: 10;
-            anchors.top: parent.top;
-            anchors.left: parent.left
-            width: parent.width/3 ;
-            height: parent.height/16;
+    id: rootWindow;
+    visible: true
+    width: 200
+    height: 200
+    Rectangle {
+        id: redRect;
+        color: "white";
+        border.color: "black"
+        anchors.margins: 10;
+        anchors.top: parent.top;
+        anchors.left: parent.left
+        width: parent.width/3 ;
+        height: parent.height/16;
 
-            TextInput {
-                id: myText
-                anchors.centerIn: parent
-                font.family: "Helvetica"
-                //font.pointSize:  50
-                font.pixelSize: 20
-                text: qsTr("IP address: ")
-                focus: true;
-                selectByMouse: true
+        TextInput {
+            id: myText
+            anchors.centerIn: parent
+            font.family: "Helvetica"
+            //font.pointSize:  50
+            font.pixelSize: 20
+            text: qsTr("IP address: ")
+            focus: true;
+            selectByMouse: true
 
-                horizontalAlignment: Text.AlignHCenter
-                cursorVisible: false
+            horizontalAlignment: Text.AlignHCenter
+            cursorVisible: false
 
-                signal qmlSignal(string msg)
-            }
+            signal qmlSignal(string msg)
         }
+    }
 
-        Rectangle{
-            id: redRect1;
-            color: "white";
-            border.color: "black"
-            anchors.margins: 10;
-            anchors.top: parent.top;
-            anchors.right: parent.right;
-            width: parent.width/3 ;
-            height: parent.height/16;
+    Rectangle {
+        id: redRect1;
+        color: "white";
+        border.color: "black"
+        anchors.margins: 10;
+        anchors.top: parent.top;
+        anchors.right: parent.right;
+        width: parent.width/3 ;
+        height: parent.height/16;
 
+        TextInput {
+            id: myText1
+            anchors.centerIn: parent
+            font.family: "Helvetica"
+            //font.pointSize:  50
+            font.pixelSize: 20
+            text: qsTr("Serial number: ") + calibrator.deviceInfo
+            focus: true;
+            selectByMouse: true
 
+            horizontalAlignment: Text.AlignHCenter
+            cursorVisible: false
 
-            TextInput {
-                id: myText1
-                anchors.centerIn: parent
-                font.family: "Helvetica"
-                //font.pointSize:  50
-                font.pixelSize: 20
-                text: qsTr("Serial number: ") + calibrator.deviceInfo
-                focus: true;
-                selectByMouse: true
-
-                horizontalAlignment: Text.AlignHCenter
-                cursorVisible: false
-
-                signal qmlSignal(string msg)
-            }
+            signal qmlSignal(string msg)
         }
+    }
 
-        Rectangle{
-            id: greenRect;
-            color: "green";
-            //opacity: 0.5;
-            anchors.margins: 10;
-            //anchors.bottom: parent.bottom;
-            anchors.right: parent.right;
-            anchors.top: redRect.verticalCenter;
-            anchors.left: redRect.horizontalCenter;
-        }
-
-        /*Rectangle{
-            id: greenRect;
-            color: "green";
-            opacity: 0.5;
-            anchors.margins: 10;
-            anchors.bottom: parent.bottom;
-            anchors.right: parent.right;
-            anchors.top: redRect.verticalCenter;
-            anchors.left: redRect.horizontalCenter;
-        }*/
+    Rectangle {
+        id: greenRect;
+        color: "green";
+        //opacity: 0.5;
+        anchors.margins: 10;
+        //anchors.bottom: parent.bottom;
+        anchors.right: parent.right;
+        anchors.top: redRect.verticalCenter;
+        anchors.left: redRect.horizontalCenter;
+    }
 }

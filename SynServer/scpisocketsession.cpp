@@ -36,6 +36,11 @@ QString ScpiSocketSession::calibrationType() const
     return fullType[0];
 }
 
+void ScpiSocketSession::clear() const
+{
+    runCommand("*CLS\n");
+}
+
 void ScpiSocketSession::chooseCalibrationKit(int kit) const
 {
     runCommand(QString("SENS:CORR:COLL:CKIT %1\n")
