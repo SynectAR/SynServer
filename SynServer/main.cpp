@@ -1,7 +1,9 @@
+#include "chartcontrol.h"
 #include "scpichannelinfo.h"
 #include "scpisoltcalibrator.h"
 #include "scpitraceinfo.h"
 #include "server.h"
+
 #include <qrcodegen.hpp>
 
 #include <QApplication>
@@ -60,7 +62,7 @@ int main(int argc, char *argv[])
     const char* QR_text = ba.data();
 
     auto qr = qrcodegen::QrCode::encodeText(QR_text, qrcodegen::QrCode::Ecc::QUARTILE);
-    //auto qr = qrcodegen::QrCode::encodeText("Laufer Artyom1", qrcodegen::QrCode::Ecc::QUARTILE);
+
     cout << toSvgString(qr, 4) << endl;
     auto string = toSvgString(qr, 4);
 
@@ -71,11 +73,13 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
+
     }, Qt::QueuedConnection);
     engine.load(url);
 
@@ -89,6 +93,11 @@ int main(int argc, char *argv[])
 
     auto context = engine.rootContext();
     context->setContextProperty("calibrator", &calibrator);
+
+    auto root = engine.rootObjects().first();
+    auto chartObject = root->findChild<QObject *>("chart");
+    auto *chart = new ChartControl(chartObject, &app);
+    context->setContextProperty("chartControl", chart);
 
     return app.exec();
 }

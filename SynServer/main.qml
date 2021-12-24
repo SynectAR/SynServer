@@ -14,47 +14,19 @@ Window {
     title: qsTr("SynServer")
 
     SwipeView {
-            id: swipeView
-            anchors.fill: parent
-            currentIndex: tabBar.currentIndex
+        id: swipeView
+        anchors.fill: parent
+        currentIndex: tabBar.currentIndex
 
-            Rectangle {
-                Chart {
-                }
-            }
-
-            Rectangle {
-                QRcode {
-
-                }
+        Rectangle {
+            Chart {
+                objectName: "chart"
             }
         }
 
-        /*TabBar {
-            id: tabBar
-            currentIndex: swipeView.currentIndex
-
-            TabButton {
-                x: 3000
-                y: 300
-                text: qsTr("Page 1")
+        Rectangle {
+            QRcode {
             }
-            TabButton {
-                text: qsTr("Page 2")
-            }
-        }*/
-
-    /*TabBar {
-        id: bar
-        width: parent.width
-        TabButton {
-            text: qsTr("Home")
-        }
-        TabButton {
-            text: qsTr("Discover")
-        }
-        TabButton {
-            text: qsTr("Activity")
         }
     }
 

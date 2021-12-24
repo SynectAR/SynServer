@@ -39,9 +39,17 @@ public:
     double power() const;
     double powerCenter() const;
     double powerSpan() const;
+    QStringList readData() const;
     void reset() const;
     bool rfOut() const;
     double scale() const;
+    void selectActiveTrace() const;
+    void selectTraceParameter(QString parameter) const;
+    void setMinFrequency(qreal minFrequency) const;
+    void setMaxFrequency(qreal maxFrequency) const;
+    void setBandWidth(uint bandWidth) const;
+    void setPointNumber(uint pointNumber) const;
+    void setReadTraceFormat(QString format) const;
     void solt2Calibration(int port1, int port2) const;
     QString sweepType() const;
     int traceCount() const;
@@ -60,7 +68,7 @@ private:
     QString _host {"127.0.0.1"};
     quint16 _port {5025};
     QTcpSocket *_socket;
-    uint _timeout {300};
+    uint _timeout {500};
 };
 
 #endif // SCPISOCKETSESSION_H

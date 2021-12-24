@@ -36,11 +36,6 @@ QString ScpiSocketSession::calibrationType() const
     return fullType[0];
 }
 
-void ScpiSocketSession::clear() const
-{
-    runCommand("*CLS\n");
-}
-
 void ScpiSocketSession::chooseCalibrationKit(int kit) const
 {
     runCommand(QString("SENS:CORR:COLL:CKIT %1\n")
@@ -173,6 +168,12 @@ double ScpiSocketSession::powerSpan() const
     return runQuery("SENS:POW:SPAN?\n").toDouble();
 }
 
+QStringList ScpiSocketSession::readData() const
+{
+    auto data = runQuery("CALC:DATA:FDAT?\n");
+    runQuery("*OPC?\n");
+    return data.split(',');
+}
 
 void ScpiSocketSession::reset() const
 {
@@ -187,6 +188,51 @@ bool ScpiSocketSession::rfOut() const
 double ScpiSocketSession::scale() const
 {
     return runQuery("DISP:WIND:TRAC:Y:PDIV?\n").toDouble();
+}
+
+void ScpiSocketSession::selectActiveTrace() const
+{
+    runCommand("CALC:PAR:SEL\n");
+}
+
+void ScpiSocketSession::selectTraceParameter(QString parameter) const
+{
+    runCommand(QString("CALC:PAR:DEF %1\n").
+               arg(parameter));
+}
+
+void ScpiSocketSession::setBandWidth(uint bandWidth) const
+{
+    runCommand(QString("SENS:BWID %1\n")
+               .arg(bandWidth)
+               .toUtf8());
+}
+
+void ScpiSocketSession::setMinFrequency(qreal minFrequency) const
+{
+    runCommand(QString("SENS:FREQ:STAR %1GHZ\n")
+               .arg(minFrequency)
+               .toUtf8());
+}
+
+void ScpiSocketSession::setMaxFrequency(qreal maxFrequency) const
+{
+    runCommand(QString("SENS:FREQ:STOP %1GHZ\n")
+               .arg(maxFrequency)
+               .toUtf8());
+}
+
+void ScpiSocketSession::setPointNumber(uint pointNumber) const
+{
+    runCommand(QString("SENS:SWE:POIN %1\n")
+               .arg(pointNumber)
+               .toUtf8());
+}
+
+void ScpiSocketSession::setReadTraceFormat(QString format) const
+{
+    runCommand(QString("CALC:FORM %1\n")
+               .arg(format));
 }
 
 void ScpiSocketSession::solt2Calibration(int port1, int port2) const
