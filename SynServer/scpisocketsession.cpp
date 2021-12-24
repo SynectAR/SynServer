@@ -53,11 +53,6 @@ int ScpiSocketSession::channelLayout() const
     return runQuery("DISP:SPL?\n").toInt();
 }
 
-void ScpiSocketSession::clear() const
-{
-    runCommand("*CLS\n");
-}
-
 QString ScpiSocketSession::deviceInfo() const
 {
     return runQuery("*IDN?\n");

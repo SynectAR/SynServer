@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     const char* QR_text = ba.data();
 
     auto qr = qrcodegen::QrCode::encodeText(QR_text, qrcodegen::QrCode::Ecc::QUARTILE);
+
     cout << toSvgString(qr, 4) << endl;
     auto string = toSvgString(qr, 4);
 
