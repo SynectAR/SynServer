@@ -44,5 +44,5 @@ Window {
         Item {
             id: activityTab
         }
-    }*/
+    }
 }
