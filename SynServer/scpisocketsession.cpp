@@ -71,9 +71,11 @@ int ScpiSocketSession::errorCode() const
     return errorMessage[0].mid(1).toInt();
 }
 
-QString ScpiSocketSession::format() const
+QString ScpiSocketSession::format(int channel, int trace) const
 {
-    return runQuery("CALC:FORM?\n").chopped(1);
+    return runQuery(QString("CALC%1:TRAC%2:FORM?\n")
+                    .arg(channel)
+                    .arg(trace)).chopped(1);
 }
 
 double ScpiSocketSession::frequencyCenter(int channel) const
@@ -152,9 +154,10 @@ void ScpiSocketSession::measureThru(int rcvport, int srcport) const
                .arg(srcport));
 }
 
-int ScpiSocketSession::number() const
+int ScpiSocketSession::number(int channel) const
 {
-    return runQuery("SERV:CHAN:TRAC:ACT?\n").toInt();
+    return runQuery(QString("SERV:CHAN%1:TRAC:ACT?\n")
+                    .arg(channel)).toInt();
 }
 
 int ScpiSocketSession::pointsCount(int channel) const
@@ -203,9 +206,11 @@ bool ScpiSocketSession::rfOut() const
     return static_cast<bool>(runQuery("OUTP?\n").toInt());
 }
 
-double ScpiSocketSession::scale() const
+double ScpiSocketSession::scale(int channel, int trace) const
 {
-    return runQuery("DISP:WIND:TRAC:Y:PDIV?\n").toDouble();
+    return runQuery(QString("DISP:WIND%1:TRAC%2:Y:PDIV?\n")
+                    .arg(channel)
+                    .arg(trace)).toDouble();
 }
 
 void ScpiSocketSession::selectActiveTrace() const

@@ -20,7 +20,7 @@ public:
     int channelLayout() const;
     QString deviceInfo() const;
     int errorCode() const;
-    QString format() const;
+    QString format(int channel, int trace) const;
     double frequencyCenter(int channel) const;
     double frequncySpan(int channel) const;
     QString getSubclassGender(int subclass) const;
@@ -33,7 +33,7 @@ public:
     QString measurementParameter(int channel, int trace) const;
     void measurePort(QString type, int port) const;
     void measureThru(int rcvport, int srcport) const;
-    int number() const;
+    int number(int channel) const;
     int pointsCount(int channel) const;
     int portCount() const;
     double power(int channel) const;
@@ -42,7 +42,7 @@ public:
     QStringList readData() const;
     void reset() const;
     bool rfOut() const;
-    double scale() const;
+    double scale(int channel, int trace) const;
     void selectActiveTrace() const;
     void selectTraceParameter(QString parameter) const;
     void setMinFrequency(qreal minFrequency) const;

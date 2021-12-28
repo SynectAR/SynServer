@@ -99,6 +99,5 @@ int main(int argc, char *argv[])
     auto *chart = new ChartControl(chartObject, &app);
     context->setContextProperty("chartControl", chart);
 
-
     return app.exec();
 }
