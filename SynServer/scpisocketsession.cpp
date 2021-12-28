@@ -20,9 +20,10 @@ ScpiSocketSession::~ScpiSocketSession()
     _socket->disconnectFromHost();
 }
 
-void ScpiSocketSession::apply() const
+void ScpiSocketSession::apply(int channel) const
 {
-    runCommand("SENS:CORR:COLL:SAVE\n");
+    runCommand(QString("SENS%1:CORR:COLL:SAVE\n")
+               .arg(channel));
 }
 
 double ScpiSocketSession::bandwidth(int channel) const
@@ -49,9 +50,10 @@ void ScpiSocketSession::chooseCalibrationKit(int kit) const
                .arg(kit));
 }
 
-void ScpiSocketSession::chooseCalibrationSubclass(int subclass) const
+void ScpiSocketSession::chooseCalibrationSubclass(int channel, int subclass) const
 {
-    runCommand(QString("SENS:CORR:COLL:SUBC %1\n")
+    runCommand(QString("SENS%1:CORR:COLL:SUBC %2\n")
+               .arg(channel)
                .arg(subclass));
 }
 
@@ -137,19 +139,22 @@ QString ScpiSocketSession::measurementParameter(int channel, int trace) const
                     .arg(trace));
 }
 
-void ScpiSocketSession::measurePort(QString type, int port) const
+void ScpiSocketSession::measurePort(QString type, int channel, int port) const
 {
-    runCommand(QString("SENS:CORR:COLL:%1 %2\n")
+    runCommand(QString("SENS%1:CORR:COLL:%2 %3\n")
+               .arg(channel)
                .arg(type)
                .arg(port));
 }
 
-void ScpiSocketSession::measureThru(int rcvport, int srcport) const
+void ScpiSocketSession::measureThru(int channel, int rcvport, int srcport) const
 {
-    runCommand(QString("SENS:CORR:COLL:THRU %1,%2\n")
+    runCommand(QString("SENS%1:CORR:COLL:THRU %2,%3\n")
+               .arg(channel)
                .arg(rcvport)
                .arg(srcport));
-    runCommand(QString("SENS:CORR:COLL:THRU %2,%1\n")
+    runCommand(QString("SENS%1:CORR:COLL:THRU %3,%2\n")
+               .arg(channel)
                .arg(rcvport)
                .arg(srcport));
 }
@@ -189,16 +194,19 @@ double ScpiSocketSession::powerSpan(int channel) const
                     .arg(channel)).toDouble();
 }
 
-QStringList ScpiSocketSession::readData() const
+QStringList ScpiSocketSession::readData(int channel, int trace) const
 {
-    auto data = runQuery("CALC:DATA:FDAT?\n");
+    auto data = runQuery(QString("CALC%1:TRAC%2:DATA:FDAT?\n")
+                         .arg(channel)
+                         .arg(trace));
     runQuery("*OPC?\n");
     return data.split(',');
 }
 
-void ScpiSocketSession::reset() const
+void ScpiSocketSession::reset(int channel) const
 {
-    runCommand("SENS:CORR:COLL:CLE\n");
+    runCommand(QString("SENS%1:CORR:COLL:CLE\n")
+               .arg(channel));
 }
 
 bool ScpiSocketSession::rfOut() const
@@ -258,9 +266,10 @@ void ScpiSocketSession::setReadTraceFormat(QString format) const
                .arg(format));
 }
 
-void ScpiSocketSession::solt2Calibration(int port1, int port2) const
+void ScpiSocketSession::solt2Calibration(int channel, int port1, int port2) const
 {
-    runCommand(QString("SENS:CORR:COLL:METH:SOLT2 %1,%2\n")
+    runCommand(QString("SENS%1:CORR:COLL:METH:SOLT2 %2,%3\n")
+               .arg(channel)
                .arg(port1)
                .arg(port2));
 }

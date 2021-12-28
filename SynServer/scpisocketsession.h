@@ -11,12 +11,12 @@ public:
     ScpiSocketSession();
     ~ScpiSocketSession();
 
-    void apply() const;
+    void apply(int channel) const;
     double bandwidth(int channel) const;
     QString calibrationType(int channel) const;
     void clear() const;
     void chooseCalibrationKit(int kit) const;
-    void chooseCalibrationSubclass(int subclass) const;
+    void chooseCalibrationSubclass(int channel, int subclass) const;
     int channelLayout() const;
     QString deviceInfo() const;
     int errorCode() const;
@@ -31,16 +31,16 @@ public:
     double minFrequency(int channel) const;
     double minPower(int channel) const;
     QString measurementParameter(int channel, int trace) const;
-    void measurePort(QString type, int port) const;
-    void measureThru(int rcvport, int srcport) const;
+    void measurePort(QString type, int channel, int port) const;
+    void measureThru(int channel, int rcvport, int srcport) const;
     int number(int channel) const;
     int pointsCount(int channel) const;
     int portCount() const;
     double power(int channel) const;
     double powerCenter(int channel) const;
     double powerSpan(int channel) const;
-    QStringList readData() const;
-    void reset() const;
+    QStringList readData(int channel, int trace) const;
+    void reset(int channel) const;
     bool rfOut() const;
     double scale(int channel, int trace) const;
     void selectActiveTrace() const;
@@ -50,7 +50,7 @@ public:
     void setBandWidth(uint bandWidth) const;
     void setPointNumber(uint pointNumber) const;
     void setReadTraceFormat(QString format) const;
-    void solt2Calibration(int port1, int port2) const;
+    void solt2Calibration(int channel, int port1, int port2) const;
     QString sweepType(int channel) const;
     int traceCount(int channel) const;
     QString triggerScope() const;

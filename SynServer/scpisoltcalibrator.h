@@ -14,20 +14,21 @@ class ScpiSoltCalibrator : public ISoltCalibrator
 public:
     ScpiSoltCalibrator();
 
-    void apply() override;
+    void apply(int channel) override;
     QString deviceInfo() const override;
-    void measurePort(Measure measure, int port) override;
-    void measureThru(int srcport, int rcvport) override;
+    void measurePort(Measure measure, int channel, int port) override;
+    void measureThru(int channel, int srcport, int rcvport) override;
     int portCount() const override;
-    PortStatus portStatus(int port) const override;
-    QVector<double> vnaData() const override;
-    void reset() override;
-    void solt2Calibration(int port1, int port2) const override;
+    PortStatus portStatus(int channel, int port) const override;
+    QVector<double> vnaData(int channel, int trace) const override;
+    void reset(int channel) override;
+    void solt2Calibration(int channel, int port1, int port2) const override;
 
 private:
     void getDeviceInfo();
     void getPortCount();
 
+    bool checkPort(int port) const;
     void chooseCalibrationKit(int kit) const;
     void prepareDevice() const;
 
@@ -39,7 +40,7 @@ private:
     QString _deviceInfo;
     int _portCount;
 
-    QVector<PortStatus> _ports;
+    QVector<QVector<PortStatus>> _channelPorts;
 
     QMap<QString, Gender> _gender {
         { "M", Gender::male },
