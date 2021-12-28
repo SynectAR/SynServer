@@ -14,7 +14,7 @@ public:
 
     TraceFormat format() const override;
     int number() const override;
-    QString measurementParameter() const override;
+    QString measurementParameter(int channel, int trace) const override;
     double scale() const override;
 
 private:

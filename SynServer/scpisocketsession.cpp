@@ -25,14 +25,16 @@ void ScpiSocketSession::apply() const
     runCommand("SENS:CORR:COLL:SAVE\n");
 }
 
-double ScpiSocketSession::bandwidth() const
+double ScpiSocketSession::bandwidth(int channel) const
 {
-    return runQuery("SENS:BAND?\n").toDouble();
+    return runQuery(QString("SENS%1:BAND?\n")
+                    .arg(channel)).toDouble();
 }
 
-QString ScpiSocketSession::calibrationType() const
+QString ScpiSocketSession::calibrationType(int channel) const
 {
-    const auto fullType = runQuery("SENS:CORR:TYPE?\n").chopped(1).split(',');
+    const auto fullType = runQuery(QString("SENS%1:CORR:TYPE?\n")
+                                   .arg(channel)).chopped(1).split(',');
     return fullType[0];
 }
 
@@ -74,14 +76,16 @@ QString ScpiSocketSession::format() const
     return runQuery("CALC:FORM?\n").chopped(1);
 }
 
-double ScpiSocketSession::frequencyCenter() const
+double ScpiSocketSession::frequencyCenter(int channel) const
 {
-    return runQuery("SENS:FREQ:CENT?\n").toDouble();
+    return runQuery(QString("SENS%1:FREQ:CENT?\n")
+                    .arg(channel)).toDouble();
 }
 
-double ScpiSocketSession::frequncySpan() const
+double ScpiSocketSession::frequncySpan(int channel) const
 {
-    return runQuery("SENS:FREQ:SPAN?\n").toDouble();
+    return runQuery(QString("SENS%1:FREQ:SPAN?\n")
+                    .arg(channel)).toDouble();
 }
 
 QString ScpiSocketSession::getSubclassGender(int subclass) const
@@ -100,29 +104,34 @@ bool ScpiSocketSession::isTriggerContinuous() const
     return static_cast<bool>(runQuery("INIT:CONT?\n").toInt());
 }
 
-double ScpiSocketSession::maxFrequency() const
+double ScpiSocketSession::maxFrequency(int channel) const
 {
-    return runQuery("SENS:FREQ:STOP?\n").toDouble();
+    return runQuery(QString("SENS%1:FREQ:STOP?\n")
+                    .arg(channel)).toDouble();
 }
 
-double ScpiSocketSession::maxPower() const
+double ScpiSocketSession::maxPower(int channel) const
 {
-    return runQuery("SOUR:POW:STOP?\n").toDouble();
+    return runQuery(QString("SOUR%1:POW:STOP?\n")
+                    .arg(channel)).toDouble();
 }
 
-double ScpiSocketSession::minFrequency() const
+double ScpiSocketSession::minFrequency(int channel) const
 {
-    return runQuery("SENS:FREQ:STAR?\n").toDouble();
+    return runQuery(QString("SENS%1:FREQ:STAR?\n")
+                    .arg(channel)).toDouble();
 }
 
-double ScpiSocketSession::minPower() const
+double ScpiSocketSession::minPower(int channel) const
 {
-    return runQuery("SENS:POW:STAR?\n").toDouble();
+    return runQuery(QString("SENS%1:POW:STAR?\n")
+                    .arg(channel)).toDouble();
 }
 
-QString ScpiSocketSession::measurementParameter(int trace) const
+QString ScpiSocketSession::measurementParameter(int channel, int trace) const
 {
-    return runQuery(QString("CALC:PAR%1:DEF?\n")
+    return runQuery(QString("CALC%1:PAR%2:DEF?\n")
+                    .arg(channel)
                     .arg(trace));
 }
 
@@ -148,9 +157,10 @@ int ScpiSocketSession::number() const
     return runQuery("SERV:CHAN:TRAC:ACT?\n").toInt();
 }
 
-int ScpiSocketSession::pointsCount() const
+int ScpiSocketSession::pointsCount(int channel) const
 {
-    return runQuery("SENS:SWE:POIN?\n").toInt();
+    return runQuery(QString("SENS%1:SWE:POIN?\n")
+                    .arg(channel)).toInt();
 }
 
 int ScpiSocketSession::portCount() const
@@ -158,19 +168,22 @@ int ScpiSocketSession::portCount() const
     return runQuery("SERV:PORT:COUN?\n").toInt();
 }
 
-double ScpiSocketSession::power() const
+double ScpiSocketSession::power(int channel) const
 {
-    return runQuery("SOUR:POW?\n").toDouble();
+    return runQuery(QString("SOUR%1:POW?\n")
+                    .arg(channel)).toDouble();
 }
 
-double ScpiSocketSession::powerCenter() const
+double ScpiSocketSession::powerCenter(int channel) const
 {
-    return runQuery("SENS:POW:CENT?\n").toDouble();
+    return runQuery(QString("SENS%1:POW:CENT?\n")
+                    .arg(channel)).toDouble();
 }
 
-double ScpiSocketSession::powerSpan() const
+double ScpiSocketSession::powerSpan(int channel) const
 {
-    return runQuery("SENS:POW:SPAN?\n").toDouble();
+    return runQuery(QString("SENS%1:POW:SPAN?\n")
+                    .arg(channel)).toDouble();
 }
 
 QStringList ScpiSocketSession::readData() const
@@ -247,14 +260,16 @@ void ScpiSocketSession::solt2Calibration(int port1, int port2) const
                .arg(port2));
 }
 
-QString ScpiSocketSession::sweepType() const
+QString ScpiSocketSession::sweepType(int channel) const
 {
-    return runQuery("SENS:SWE:TYPE?\n").chopped(1);
+    return runQuery(QString("SENS%1:SWE:TYPE?\n")
+                    .arg(channel)).chopped(1);
 }
 
-int ScpiSocketSession::traceCount() const
+int ScpiSocketSession::traceCount(int channel) const
 {
-    return runQuery("CALC:PAR:COUN?\n").toInt();
+    return runQuery(QString("CALC%1:PAR:COUN?\n")
+                    .arg(channel)).toInt();
 }
 
 QString ScpiSocketSession::triggerScope() const

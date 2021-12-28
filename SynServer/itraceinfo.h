@@ -31,7 +31,7 @@ public:
 
     virtual TraceFormat format() const = 0;
     virtual int number() const = 0;
-    virtual QString measurementParameter() const = 0;
+    virtual QString measurementParameter(int channel, int trace) const = 0;
     virtual double scale() const = 0;
 };
 

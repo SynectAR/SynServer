@@ -12,9 +12,9 @@ int ScpiTraceInfo::number() const
     return _session.number();
 }
 
-QString ScpiTraceInfo::measurementParameter() const
+QString ScpiTraceInfo::measurementParameter(int channel, int trace) const
 {
-    return _session.measurementParameter(1).chopped(1);
+    return _session.measurementParameter(channel, trace).chopped(1);
 }
 
 double ScpiTraceInfo::scale() const
