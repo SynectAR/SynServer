@@ -28,8 +28,9 @@ private:
     void getDeviceInfo();
     void getPortCount();
 
-    bool checkPort(int port) const;
     void chooseCalibrationKit(int kit) const;
+    bool isChannelCorrect(int channel) const;
+    bool isPortCorrect(int port) const;
     void prepareDevice() const;
 
     void clearStatus(PortStatus &port);

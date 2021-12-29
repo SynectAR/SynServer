@@ -1,5 +1,6 @@
 #include "chartcontrol.h"
 
+#include "scpichannelinfo.h"
 #include "scpisoltcalibrator.h"
 
 #include <QAbstractSeries>
@@ -36,9 +37,10 @@ ChartControl::ChartControl(QObject *chart, QObject *parent) :
     _axisX->setTickCount(9);
 
     // todo: Get from SCPI
-    const auto minFrequency = 0;
-    const auto maxFrequency = 9;
-    const auto points = 201.0;
+    ScpiChannelInfo info;
+    const auto minFrequency = info.minFrequency(1);
+    const auto maxFrequency = info.maxFrequency(1);
+    const auto points = info.pointsCount(1);
     const auto delta = (maxFrequency - minFrequency) / points;
 
     _frequency.reserve(points);
@@ -49,7 +51,8 @@ ChartControl::ChartControl(QObject *chart, QObject *parent) :
 
 void ChartControl::updateData()
 {
-    QVector<double> data = _calibrator.vnaData();
+    // todo: Add channel and trace
+    QVector<double> data = _calibrator.vnaData(1, 1);
 
     QVector<QPointF> points;
     for (int i = 0; i < data.length(); ++i) {
