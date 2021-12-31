@@ -141,6 +141,10 @@ QString ScpiSocketSession::measurementParameter(int channel, int trace) const
 
 void ScpiSocketSession::measurePort(QString type, int channel, int port) const
 {
+    qDebug() << QString("SENS%1:CORR:COLL:%2 %3\n")
+                .arg(channel)
+                .arg(type)
+                .arg(port);
     runCommand(QString("SENS%1:CORR:COLL:%2 %3\n")
                .arg(channel)
                .arg(type)
@@ -266,12 +270,14 @@ void ScpiSocketSession::setReadTraceFormat(QString format) const
                .arg(format));
 }
 
-void ScpiSocketSession::solt2Calibration(int channel, int port1, int port2) const
+void ScpiSocketSession::soltCalibration(int channel, const QVector<int> &ports) const
 {
-    runCommand(QString("SENS%1:CORR:COLL:METH:SOLT2 %2,%3\n")
-               .arg(channel)
-               .arg(port1)
-               .arg(port2));
+    const QString commandTemplate = "SENS%1:CORR:COLL:METH:SOLT%2 ";
+    QString command = commandTemplate.arg(channel).arg(ports.size());
+    for (const int port : ports)
+        command += QString::number(port) + ',';
+    command.replace(command.size() - 1, 1, '\n');
+    runCommand(command);
 }
 
 QString ScpiSocketSession::sweepType(int channel) const

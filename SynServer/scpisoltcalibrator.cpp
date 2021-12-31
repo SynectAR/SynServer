@@ -110,15 +110,24 @@ void ScpiSoltCalibrator::reset(int channel)
             clearStatus(port);
 }
 
-void ScpiSoltCalibrator::solt2Calibration(int channel, int port1, int port2) const
+void ScpiSoltCalibrator::soltCalibration(int channel, const QVector<int> &ports) const
 {
-    if (!isChannelCorrect(channel)
-            || !isPortCorrect(port1)
-            || !isPortCorrect(port2)
-            || (port1 == port2))
+    if (!isChannelCorrect(channel))
         return;
 
-    _session.solt2Calibration(channel, port1, port2);
+    QVector<int> portsCount(16, 0);
+    for (const int port: ports) {
+        if (!isPortCorrect(port))
+            return;
+
+        ++portsCount[port];
+    }
+
+    for (const int count: portsCount)
+        if (count > 1)
+            return;
+
+    _session.soltCalibration(channel, ports);
 }
 
 void ScpiSoltCalibrator::chooseCalibrationKit(int kit) const

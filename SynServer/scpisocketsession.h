@@ -50,7 +50,7 @@ public:
     void setBandWidth(uint bandWidth) const;
     void setPointNumber(uint pointNumber) const;
     void setReadTraceFormat(QString format) const;
-    void solt2Calibration(int channel, int port1, int port2) const;
+    void soltCalibration(int channel, const QVector<int> &ports) const;
     QString sweepType(int channel) const;
     int traceCount(int channel) const;
     QString triggerScope() const;

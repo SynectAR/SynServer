@@ -22,7 +22,7 @@ public:
     PortStatus portStatus(int channel, int port) const override;
     QVector<double> vnaData(int channel, int trace) const override;
     void reset(int channel) override;
-    void solt2Calibration(int channel, int port1, int port2) const override;
+    void soltCalibration(int channel, const QVector<int> &ports) const override;
 
 private:
     void getDeviceInfo();

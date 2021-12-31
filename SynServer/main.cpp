@@ -99,5 +99,25 @@ int main(int argc, char *argv[])
     auto *chart = new ChartControl(chartObject, &app);
     context->setContextProperty("chartControl", chart);
 
+    auto measure = [&calibrator] (int port) {
+        calibrator.measurePort(Measure::OPEN, 1, port);
+        calibrator.measurePort(Measure::SHORT, 1, port);
+        calibrator.measurePort(Measure::LOAD, 1, port);
+    };
+
+    calibrator.soltCalibration(1, {1, 2, 3, 4, 5});
+    measure(1);
+    measure(2);
+    measure(3);
+    measure(4);
+    measure(5);
+
+    calibrator.measureThru(1, 1, 2);
+    calibrator.measureThru(1, 2, 3);
+    calibrator.measureThru(1, 3, 4);
+    calibrator.measureThru(1, 4, 5);
+
+    calibrator.apply(1);
+
     return app.exec();
 }

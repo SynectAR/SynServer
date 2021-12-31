@@ -44,7 +44,7 @@ public:
     virtual PortStatus portStatus(int channel, int port) const = 0;
     virtual QVector<double> vnaData(int channel, int trace) const = 0;
     virtual void reset(int channel) = 0;
-    virtual void solt2Calibration(int channel, int port1, int port2) const = 0;
+    virtual void soltCalibration(int channel, const QVector<int> &ports) const = 0;
 
 signals:
     void deviceInfoChanged(QString deviceInfo);
