@@ -3,7 +3,6 @@ syntax = "proto3";
 package vnarpc;
 
 
-
 service VnaRpc {
     rpc isConnected (EmptyMessage) returns (ConnectionState) {}
     
@@ -17,13 +16,21 @@ service VnaRpc {
     rpc isReady (EmptyMessage) returns (State) {} // вкл выкл для устройства 
     rpc sweepType (EmptyMessage) returns (SweepType) {} // режим измерения  
     rpc pointsCount (EmptyMessage) returns (Points) {} // количество точек
-    rpc triggerMode (EmptyMessage) returns (TriggerMode) {} // тригер
+    rpc triggerMode (EmptyMessage) returns (TriggerMode) {} // триггер
     // span если измерение по мощности то по мощности иначе частота 
     rpc span (SweepType) returns (Span) {} 
     // rfout 
     rpc rfOut (EmptyMessage) returns (State) {} 
     // откалиброван или нет 
     rpc calibrationType (EmptyMessage) returns (CalibrationType) {}
+    // список используемых портов в канале
+    rpc portList (EmptyMessage) returns (ActivePorts) {}
+    // выбор портов для солт2
+    rpc choosePortsSolt2 (PortsPair) returns (EmptyMessage) {}
+}
+
+message ActivePorts {
+    repeated int32 ports = 1;
 }
 
 message CalibrationType {
@@ -95,4 +102,3 @@ message PortCount {
 }
 
 message EmptyMessage {}
-

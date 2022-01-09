@@ -86,6 +86,12 @@ private:
     Status calibrationType(ServerContext* context,
                            const EmptyMessage* request,
                            vnarpc::CalibrationType* reply) override;
+    Status portList(ServerContext* context,
+                    const EmptyMessage* request,
+                    vnarpc::ActivePorts* reply) override;
+    Status choosePortsSolt2(ServerContext* context,
+                            const PortsPair* request,
+                            EmptyMessage* reply) override;
 
 };
 

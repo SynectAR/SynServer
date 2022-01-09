@@ -70,7 +70,7 @@ ChartView {
             font.family: "Helvetica"
             //font.pointSize:  50
             font.pixelSize: 20
-            text: qsTr("IP address: ")
+            text: qsTr("") + server.serverAddress
             focus: true;
             selectByMouse: true
 
@@ -97,7 +97,7 @@ ChartView {
             font.family: "Helvetica"
             //font.pointSize:  50
             font.pixelSize: 20
-            text: qsTr("Serial number: ") + calibrator.deviceInfo
+            text: qsTr("") + calibrator.deviceInfo
             focus: true;
             selectByMouse: true
 

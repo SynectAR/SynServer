@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 #endif
 
     ScpiSoltCalibrator calibrator;
+    calibrator.solt2Calibration(1, 2);
 
     QApplication app(argc, argv);
 
@@ -46,9 +47,11 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
-
     ScpiChannelInfo channelInfo;
     RpcServer server(calibrator, channelInfo);
+
+    RpcClient client;
+    client.listPort();
 
     auto context = engine.rootContext();
     context->setContextProperty("server", &server);

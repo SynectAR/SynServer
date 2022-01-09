@@ -210,6 +210,23 @@ Status VnaRpcServiceImpl::calibrationType(grpc::ServerContext *context,
     return Status::OK;
 }
 
+Status VnaRpcServiceImpl::portList(grpc::ServerContext *context,
+                                   const vnarpc::EmptyMessage *request,
+                                   vnarpc::ActivePorts *reply)
+{
+    for (auto p : channelInfo->listPorts())
+        reply->add_ports(p - 1);
+    return Status::OK;
+}
+
+Status VnaRpcServiceImpl::choosePortsSolt2(grpc::ServerContext *context,
+                                           const vnarpc::PortsPair *request,
+                                           vnarpc::EmptyMessage *reply)
+{
+    calibrator->solt2Calibration(request->firstport(), request->secondport());
+    return Status::OK;
+}
+
 RpcServer::RpcServer(ISoltCalibrator& calibrator, IChannelInfo& channelInfo, QObject *parent)
   : QObject(parent)
 {

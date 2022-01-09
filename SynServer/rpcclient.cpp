@@ -36,6 +36,21 @@ int RpcClient::getPortCount()
     }
 }
 
+void RpcClient::listPort()
+{
+    EmptyMessage request;
+    vnarpc::ActivePorts reply;
+    ClientContext context;
+    Status status = stub_->portList(&context, request, &reply);
+    for (auto p : reply.ports())
+        qDebug() << p;
+    if (status.ok()) {
+        qDebug() << "OK";
+    } else {
+        qDebug() << (int)status.error_code();
+    }
+}
+
 void RpcClient::span()
 {
     vnarpc::SweepType request;
