@@ -14,7 +14,6 @@ using grpc::Status;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;
 using vnarpc::MeasureParams;
-using vnarpc::PortsPair;
 using vnarpc::VnaRpc;
 
 RpcClient::RpcClient(QObject* parent_)
@@ -38,9 +37,10 @@ int RpcClient::getPortCount()
 
 void RpcClient::listPort()
 {
-    EmptyMessage request;
+    vnarpc::Channel request;
     vnarpc::ActivePorts reply;
     ClientContext context;
+    request.set_channel(1);
     Status status = stub_->portList(&context, request, &reply);
     for (auto p : reply.ports())
         qDebug() << p;
@@ -53,10 +53,11 @@ void RpcClient::listPort()
 
 void RpcClient::span()
 {
-    vnarpc::SweepType request;
+    vnarpc::SweepTypeAndChannel request;
     vnarpc::Span reply;
     ClientContext context;
-    request.set_type(vnarpc::SweepType::power);
+    request.set_channel(1);
+    request.set_type(vnarpc::sweep_type::power);
     Status status = stub_->span(&context, request, &reply);
     if (status.ok()) {
         qDebug() << "OK";
@@ -69,7 +70,8 @@ void RpcClient::getPortStatus(int port)
 {
     vnarpc::PortStatus reply;
     ClientContext context;
-    vnarpc::Port request;
+    vnarpc::PortAndChannel request;
+    request.set_channel(1);
     request.set_port(port);
     Status status = stub_->getPortStatus(&context, request, &reply);
 
@@ -90,6 +92,7 @@ void RpcClient::measurePort(std::string type, int port)
     EmptyMessage reply;
     ClientContext context;
     MeasureParams request;
+    request.set_channel(1);
     request.set_type(type);
     request.set_port(port);
     request.set_gender(1);
@@ -105,7 +108,8 @@ void RpcClient::apply()
 {
     EmptyMessage reply;
     ClientContext context;
-    EmptyMessage request;
+    vnarpc::Channel request;
+    request.set_channel(1);
     Status status = stub_->apply(&context, request, &reply);
     if (status.ok()) {
         qDebug() << "OK";

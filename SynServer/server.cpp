@@ -27,22 +27,11 @@ Status VnaRpcServiceImpl::getPortCount(grpc::ServerContext *context,
     return Status::OK;
 }
 
-Status VnaRpcServiceImpl::getPortStatus(grpc::ServerContext *context,
-                                              const vnarpc::Port *request,
-                                              vnarpc::PortStatus *reply)
+Status VnaRpcServiceImpl::getPortStatus(ServerContext* context,
+                                        const vnarpc::PortAndChannel* request,
+                                        vnarpc::PortStatus* reply)
 {
-    //getPortStatus
-
-    //PortStatus
-    //reply:
-    //bool open
-    //bool short
-    //bool load
-    //bool gender
-    //request:
-    //int port
-
-    auto port = calibrator->portStatus(request->port());
+    auto port = calibrator->portStatus(request->channel(), request->port());
     reply->set_open(port.OPEN);
     reply->set_short_(port.SHORT);
     reply->set_load(port.LOAD);
@@ -55,12 +44,8 @@ Status VnaRpcServiceImpl::measurePort(grpc::ServerContext *context,
                                             const vnarpc::MeasureParams *request,
                                             vnarpc::EmptyMessage *reply)
 {
-    //MeasureParams
-    //int32 port
-    //string type
-    //bool gender
-
     int port = request->port();
+    int channel = request->channel();
 
     std::string typeOfMeasure = request->type();
     QString deb;
@@ -68,13 +53,13 @@ Status VnaRpcServiceImpl::measurePort(grpc::ServerContext *context,
 
     switch (typeOfMeasure[0]) {
         case 'O':
-            calibrator->measurePort(Measure::OPEN, port);
+            calibrator->measurePort(Measure::OPEN, channel, port);
             break;
         case 'S':
-            calibrator->measurePort(Measure::SHORT, port);
+            calibrator->measurePort(Measure::SHORT, channel, port);
             break;
         case 'L':
-            calibrator->measurePort(Measure::LOAD, port);
+            calibrator->measurePort(Measure::LOAD, channel, port);
             break;
         default:
             return Status::CANCELLED;
@@ -85,30 +70,26 @@ Status VnaRpcServiceImpl::measurePort(grpc::ServerContext *context,
 }
 
 Status VnaRpcServiceImpl::measureThru(grpc::ServerContext *context,
-                                            const vnarpc::PortsPair *request,
+                                            const vnarpc::ThruParams *request,
                                             vnarpc::EmptyMessage *reply)
 {
-    //PortsPair
-    //firstport
-    //secondport
-
-    calibrator->measureThru(request->firstport(), request->secondport());
+    calibrator->measureThru(request->channel(), request->srcport(), request->rcvport());
     return Status::OK;
 }
 
 Status VnaRpcServiceImpl::apply(grpc::ServerContext *context,
-                                      const vnarpc::EmptyMessage *request,
+                                      const vnarpc::Channel *request,
                                       vnarpc::EmptyMessage *reply)
 {
-    calibrator->apply();
+    calibrator->apply(request->channel());
     return Status::OK;
 }
 
 Status VnaRpcServiceImpl::reset(grpc::ServerContext *context,
-                                      const vnarpc::EmptyMessage *request,
+                                      const vnarpc::Channel *request,
                                       vnarpc::EmptyMessage *reply)
 {
-    calibrator->reset();
+    calibrator->reset(request->channel());
     return Status::OK;
 }
 
@@ -130,26 +111,26 @@ Status VnaRpcServiceImpl::isReady(grpc::ServerContext *context,
 }
 
 Status VnaRpcServiceImpl::sweepType(grpc::ServerContext *context,
-                                    const vnarpc::EmptyMessage *request,
+                                    const vnarpc::Channel *request,
                                     vnarpc::SweepType *reply)
 {
-    SweepType vnaType = channelInfo->sweepType();
+    SweepType vnaType = channelInfo->sweepType(request->channel());
     if (vnaType == SweepType::linear)
-        reply->set_type(vnarpc::SweepType::linear);
+        reply->set_type(vnarpc::sweep_type::linear);
     else if (vnaType == SweepType::logarithmic)
-        reply->set_type(vnarpc::SweepType::logarithmic);
+        reply->set_type(vnarpc::sweep_type::logarithmic);
     else if (vnaType == SweepType::power)
-        reply->set_type(vnarpc::SweepType::power);
+        reply->set_type(vnarpc::sweep_type::power);
     else if (vnaType == SweepType::segment)
-        reply->set_type(vnarpc::SweepType::segment);
+        reply->set_type(vnarpc::sweep_type::segment);
     return Status::OK;
 }
 
 Status VnaRpcServiceImpl::pointsCount(grpc::ServerContext *context,
-                                      const vnarpc::EmptyMessage *request,
+                                      const vnarpc::Channel *request,
                                       vnarpc::Points *reply)
 {
-    reply->set_count(channelInfo->pointsCount());
+    reply->set_count(channelInfo->pointsCount(request->channel()));
     return Status::OK;
 }
 
@@ -166,16 +147,17 @@ Status VnaRpcServiceImpl::triggerMode(grpc::ServerContext *context,
 }
 
 Status VnaRpcServiceImpl::span(grpc::ServerContext *context,
-                               const vnarpc::SweepType *request,
+                               const vnarpc::SweepTypeAndChannel *request,
                                vnarpc::Span *reply)
 {
+    int channel = request->channel();
     // span если измерение по мощности то по мощности иначе частота
-    if (request->type() == vnarpc::SweepType::power) {
-        reply->set_max(channelInfo->maxPower());
-        reply->set_min(channelInfo->minPower());
+    if (request->type() == vnarpc::sweep_type::power) {
+        reply->set_max(channelInfo->maxPower(channel));
+        reply->set_min(channelInfo->minPower(channel));
     } else {
-        reply->set_max(channelInfo->maxFrequency());
-        reply->set_min(channelInfo->minFrequency());
+        reply->set_max(channelInfo->maxFrequency(channel));
+        reply->set_min(channelInfo->minFrequency(channel));
     }
     return Status::OK;
 }
@@ -189,10 +171,10 @@ Status VnaRpcServiceImpl::rfOut(grpc::ServerContext *context,
 }
 
 Status VnaRpcServiceImpl::calibrationType(grpc::ServerContext *context,
-                                          const vnarpc::EmptyMessage *request,
+                                          const vnarpc::Channel *request,
                                           vnarpc::CalibrationType *reply)
 {
-    CalibrationType vnaCalType = channelInfo->calibrationType();
+    CalibrationType vnaCalType = channelInfo->calibrationType(request->channel());
     if (vnaCalType == CalibrationType::none)
         reply->set_type("none");
     else if (vnaCalType == CalibrationType::onePath)
@@ -211,19 +193,24 @@ Status VnaRpcServiceImpl::calibrationType(grpc::ServerContext *context,
 }
 
 Status VnaRpcServiceImpl::portList(grpc::ServerContext *context,
-                                   const vnarpc::EmptyMessage *request,
+                                   const vnarpc::Channel *request,
                                    vnarpc::ActivePorts *reply)
 {
-    for (auto p : channelInfo->listPorts())
+    auto ports = channelInfo->listPorts(request->channel());
+    for (auto p : ports)
         reply->add_ports(p - 1);
     return Status::OK;
 }
 
-Status VnaRpcServiceImpl::choosePortsSolt2(grpc::ServerContext *context,
-                                           const vnarpc::PortsPair *request,
+Status VnaRpcServiceImpl::chooseSoltPorts(grpc::ServerContext *context,
+                                           const vnarpc::SoltPorts *request,
                                            vnarpc::EmptyMessage *reply)
 {
-    calibrator->solt2Calibration(request->firstport(), request->secondport());
+    QVector<int> ports;
+    for (auto port : request->ports())
+        ports.append(port);
+
+    calibrator->soltCalibration(request->channel(), ports);
     return Status::OK;
 }
 

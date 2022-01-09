@@ -18,8 +18,6 @@ using vnarpc::VnaRpc;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;
 using vnarpc::MeasureParams;
-using vnarpc::PortsPair;
-using vnarpc::Port;
 using vnarpc::State;
 using vnarpc::ConnectionState;
 
@@ -46,19 +44,19 @@ private:
                         const EmptyMessage* request,
                         PortCount* reply) override;
     Status getPortStatus(ServerContext* context,
-                        const Port* request,
+                        const vnarpc::PortAndChannel* request,
                         vnarpc::PortStatus* reply) override;
     Status measurePort(ServerContext* context,
                         const MeasureParams* request,
                         EmptyMessage* reply) override;
     Status measureThru(ServerContext* context,
-                        const PortsPair* request,
+                        const vnarpc::ThruParams* request,
                         EmptyMessage* reply) override;
     Status apply(ServerContext* context,
-                        const EmptyMessage* request,
+                        const vnarpc::Channel* request,
                         EmptyMessage* reply) override;
     Status reset(ServerContext* context,
-                        const EmptyMessage* request,
+                        const vnarpc::Channel* request,
                         EmptyMessage* reply) override;
 
     // статус
@@ -69,28 +67,28 @@ private:
                    const EmptyMessage* request,
                    State* reply) override;
     Status sweepType(ServerContext* context,
-                     const EmptyMessage* request,
+                     const vnarpc::Channel* request,
                      vnarpc::SweepType* reply) override;
     Status pointsCount(ServerContext* context,
-                       const EmptyMessage* request,
+                       const vnarpc::Channel* request,
                        vnarpc::Points* reply) override;
     Status triggerMode(ServerContext* context,
                        const EmptyMessage* request,
                        vnarpc::TriggerMode* reply) override;
     Status span(ServerContext* context,
-                const vnarpc::SweepType* request,
+                const vnarpc::SweepTypeAndChannel* request,
                 vnarpc::Span* reply) override;
     Status rfOut(ServerContext* context,
                  const EmptyMessage* request,
                  vnarpc::State* reply) override;
     Status calibrationType(ServerContext* context,
-                           const EmptyMessage* request,
+                           const vnarpc::Channel* request,
                            vnarpc::CalibrationType* reply) override;
     Status portList(ServerContext* context,
-                    const EmptyMessage* request,
+                    const vnarpc::Channel* request,
                     vnarpc::ActivePorts* reply) override;
-    Status choosePortsSolt2(ServerContext* context,
-                            const PortsPair* request,
+    Status chooseSoltPorts(ServerContext* context,
+                            const vnarpc::SoltPorts* request,
                             EmptyMessage* reply) override;
 
 };

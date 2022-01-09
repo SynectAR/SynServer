@@ -8,14 +8,14 @@ class TempSoltCalibrator : public ISoltCalibrator
 public:
     TempSoltCalibrator();
 
-    void apply() override;
+    void apply(int channel) override;
     QString deviceInfo() const override;
-    void measurePort(Measure measure, int port) override;
-    void measureThru(int srcport, int rcvport) override;
+    void measurePort(Measure measure, int channel, int port) override;
+    void measureThru(int channel, int srcport, int rcvport) override;
     int portCount() const override;
-    PortStatus portStatus(int port) const override;
-    void reset() override;
-    void solt2Calibration(int port1, int port2) const override;
+    PortStatus portStatus(int channel, int port) const override;
+    void reset(int channel) override;
+    void soltCalibration(int channel, const QVector<int> &ports) const override;
 
 private:
     PortStatus ports[2];

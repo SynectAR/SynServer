@@ -18,7 +18,6 @@ using grpc::Status;
 using vnarpc::EmptyMessage;
 using vnarpc::PortCount;
 using vnarpc::MeasureParams;
-using vnarpc::PortsPair;
 using vnarpc::VnaRpc;
 
 

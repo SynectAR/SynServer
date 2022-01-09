@@ -5,7 +5,7 @@ TempSoltCalibrator::TempSoltCalibrator()
 {
 }
 
-void TempSoltCalibrator::apply()
+void TempSoltCalibrator::apply(int channel)
 {
     for (auto i : ports) {
         qDebug() << "\nopen = " << i.OPEN
@@ -22,7 +22,7 @@ QString TempSoltCalibrator::deviceInfo() const
     return device;
 }
 
-void TempSoltCalibrator::measurePort(Measure measure, int port)
+void TempSoltCalibrator::measurePort(Measure measure, int channel, int port)
 {
         if (measure == Measure::OPEN) {
             ports[port - 1].OPEN = {true};
@@ -33,7 +33,7 @@ void TempSoltCalibrator::measurePort(Measure measure, int port)
         }
 }
 
-void TempSoltCalibrator::measureThru(int srcport, int rcvport)
+void TempSoltCalibrator::measureThru(int channel, int srcport, int rcvport)
 {
 
 }
@@ -43,17 +43,17 @@ int TempSoltCalibrator::portCount() const
     return 60;
 }
 
-PortStatus TempSoltCalibrator::portStatus(int port) const
+PortStatus TempSoltCalibrator::portStatus(int channel, int port) const
 {
     return ports[port - 1];
 }
 
-void TempSoltCalibrator::reset()
+void TempSoltCalibrator::reset(int channel)
 {
 
 }
 
-void TempSoltCalibrator::solt2Calibration(int port1, int port2) const
+void TempSoltCalibrator::soltCalibration(int channel, const QVector<int> &ports) const
 {
 
 }
