@@ -36,15 +36,15 @@ class ISoltCalibrator : public QObject
 public:
     virtual ~ISoltCalibrator() = default;
 
-    virtual void apply() = 0;
+    virtual void apply(int channel) = 0;
     virtual QString deviceInfo() const = 0;
-    virtual void measurePort(Measure measure, int port) = 0;
-    virtual void measureThru(int srcport, int rcvport) = 0;
+    virtual void measurePort(Measure measure, int channel, int port) = 0;
+    virtual void measureThru(int channel, int srcport, int rcvport) = 0;
     virtual int portCount() const = 0;
-    virtual PortStatus portStatus(int port) const = 0;
-    virtual QVector<double> vnaData() const = 0;
-    virtual void reset() = 0;
-    virtual void solt2Calibration(int port1, int port2) const = 0;
+    virtual PortStatus portStatus(int channel, int port) const = 0;
+    virtual QVector<double> vnaData(int channel, int trace) const = 0;
+    virtual void reset(int channel) = 0;
+    virtual void soltCalibration(int channel, const QVector<int> &ports) const = 0;
 
 signals:
     void deviceInfoChanged(QString deviceInfo);

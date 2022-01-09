@@ -12,10 +12,10 @@ class ScpiTraceInfo : public ITraceInfo
 public:
     ScpiTraceInfo();
 
-    TraceFormat format() const override;
-    int number() const override;
-    QString measurementParameter() const override;
-    double scale() const override;
+    TraceFormat format(int channel, int trace) const override;
+    int number(int channel) const override;
+    QString measurementParameter(int channel, int trace) const override;
+    double scale(int channel, int trace) const override;
 
 private:
     ScpiSocketSession _session;

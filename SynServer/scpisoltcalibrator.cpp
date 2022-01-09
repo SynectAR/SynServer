@@ -5,21 +5,28 @@ ScpiSoltCalibrator::ScpiSoltCalibrator()
     getDeviceInfo();
     getPortCount();
 
-    _ports.resize(_portCount);
-    for (auto& port: _ports) {
-        port.gender = _gender[_session.getSubclassGender(1)];
-        port.THRU.resize(_portCount);
+    _channelPorts.resize(16);
+    for (auto &ports: _channelPorts) {
+        ports.resize(_portCount);
+        for (auto &port: ports) {
+            port.gender = _gender[_session.getSubclassGender(1)];
+            port.THRU.resize(_portCount);
+        }
     }
 
     chooseCalibrationKit(1);
 }
 
-void ScpiSoltCalibrator::apply()
+void ScpiSoltCalibrator::apply(int channel)
 {
-    _session.apply();
+    if (!isChannelCorrect(channel))
+        return;
 
-    for (auto &port: _ports)
-        clearStatus(port);
+    _session.apply(channel);
+
+    for (auto &ports: _channelPorts)
+        for (auto &port: ports)
+            clearStatus(port);
 }
 
 QString ScpiSoltCalibrator::deviceInfo() const
@@ -27,43 +34,45 @@ QString ScpiSoltCalibrator::deviceInfo() const
     return _deviceInfo;
 }
 
-void ScpiSoltCalibrator::measurePort(Measure measure, int port)
+void ScpiSoltCalibrator::measurePort(Measure measure, int channel, int port)
 {
-    if (port <= 0 || _portCount < port)
+    if (!isChannelCorrect(channel) || !isPortCorrect(port))
         return;
 
     _session.clear();
-    _session.chooseCalibrationSubclass(1);
-    _session.measurePort(_measureName[measure], port);
+    _session.chooseCalibrationSubclass(channel, 1);
+    _session.measurePort(_measureName[measure], channel, port);
 
+    qDebug() << _session.errorCode();
     if (_session.errorCode() != 0)
         return;
 
     switch (measure) {
     case Measure::OPEN:
-        _ports[port - 1].OPEN = true;
+        _channelPorts[channel - 1][port - 1].OPEN = true;
         break;
     case Measure::SHORT:
-        _ports[port - 1].SHORT = true;
+        _channelPorts[channel - 1][port - 1].SHORT = true;
         break;
     case Measure::LOAD:
-        _ports[port -1].LOAD = true;
+        _channelPorts[channel - 1][port -1].LOAD = true;
         break;
     }
 }
 
-void ScpiSoltCalibrator::measureThru(int srcport, int rcvport)
+void ScpiSoltCalibrator::measureThru(int channel, int srcport, int rcvport)
 {
-    if ((srcport <= 0 || _portCount < srcport)
-       || (rcvport <= 0 || _portCount < rcvport)
-       || (rcvport == srcport))
+    if (!isChannelCorrect(channel)
+            || !isPortCorrect(srcport)
+            || !isPortCorrect(rcvport)
+            || (rcvport == srcport))
         return;
 
-    _ports[srcport - 1].THRU[rcvport - 1] = true;
-    _ports[rcvport - 1].THRU[srcport - 1] = true;
+    _channelPorts[channel - 1][srcport - 1].THRU[rcvport - 1] = true;
+    _channelPorts[channel - 1][rcvport - 1].THRU[srcport - 1] = true;
 
 
-    _session.measureThru(srcport, rcvport);
+    _session.measureThru(channel, srcport, rcvport);
 }
 
 int ScpiSoltCalibrator::portCount() const
@@ -71,18 +80,15 @@ int ScpiSoltCalibrator::portCount() const
     return _portCount;
 }
 
-PortStatus ScpiSoltCalibrator::portStatus(int port) const
+PortStatus ScpiSoltCalibrator::portStatus(int channel, int port) const
 {
-    if (port <= 0 || _portCount < port)
-        return {};
-
-    return _ports[port - 1];
+    return _channelPorts[channel - 1][port - 1];
 }
 
-QVector<double> ScpiSoltCalibrator::vnaData() const
+QVector<double> ScpiSoltCalibrator::vnaData(int channel, int trace) const
 {
     QVector<double> vnaData;
-    auto data = _session.readData();
+    auto data = _session.readData(channel, trace);
 
     vnaData.reserve(data.size() / 2);
 
@@ -92,27 +98,41 @@ QVector<double> ScpiSoltCalibrator::vnaData() const
     return vnaData;
 }
 
-void ScpiSoltCalibrator::reset()
+void ScpiSoltCalibrator::reset(int channel)
 {
-    _session.reset();
-
-    for (auto &port: _ports)
-        clearStatus(port);
-}
-
-void ScpiSoltCalibrator::solt2Calibration(int port1, int port2) const
-{
-    if ((port1 <= 0 || _portCount < port1)
-       || (port2 <= 0 || _portCount < port2)
-       || (port1 == port2))
+    if (!isChannelCorrect(channel))
         return;
 
-    _session.solt2Calibration(port1, port2);
+    _session.reset(channel);
+
+    for (auto &ports: _channelPorts)
+        for (auto &port: ports)
+            clearStatus(port);
+}
+
+void ScpiSoltCalibrator::soltCalibration(int channel, const QVector<int> &ports) const
+{
+    if (!isChannelCorrect(channel))
+        return;
+
+    QVector<int> portsCount(16, 0);
+    for (const int port: ports) {
+        if (!isPortCorrect(port))
+            return;
+
+        ++portsCount[port];
+    }
+
+    for (const int count: portsCount)
+        if (count > 1)
+            return;
+
+    _session.soltCalibration(channel, ports);
 }
 
 void ScpiSoltCalibrator::chooseCalibrationKit(int kit) const
 {
-    if (kit <= 0 || 64 < kit)
+    if (1 <= kit && kit <= 64)
         return;
     _session.chooseCalibrationKit(kit);
 }
@@ -134,6 +154,16 @@ void ScpiSoltCalibrator::clearStatus(PortStatus &port)
     port.SHORT = false;
     port.LOAD = false;
     port.THRU.fill(false);
+}
+
+bool ScpiSoltCalibrator::isChannelCorrect(int channel) const
+{
+    return 1 <= channel && channel <= 16;
+}
+
+bool ScpiSoltCalibrator::isPortCorrect(int port) const
+{
+    return 1 <= port && port <= _portCount;
 }
 
 void ScpiSoltCalibrator::getDeviceInfo()
