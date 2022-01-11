@@ -10,7 +10,6 @@ ChartView {
     antialiasing: true
 
     LineSeries {
-        objectName: "series"
         name: "S11"
         color: "black"
     }
