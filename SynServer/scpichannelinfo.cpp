@@ -2,29 +2,34 @@
 
 ScpiChannelInfo::ScpiChannelInfo() {}
 
-double ScpiChannelInfo::bandwidth() const
+double ScpiChannelInfo::bandwidth(int channel) const
 {
-    return _session.bandwidth();
+    return _session.bandwidth(channel);
 }
 
-CalibrationType ScpiChannelInfo::calibrationType() const
+CalibrationType ScpiChannelInfo::calibrationType(int channel) const
 {
-    return _calibrationTypes[_session.calibrationType()];
+    return _calibrationTypes[_session.calibrationType(channel)];
 }
 
 int ScpiChannelInfo::channelCount() const
 {
-    return _layoutChannels[_session.channelLayout() - 1];
+    size_t channel;
+    for (channel = 1; channel <= 32; ++channel) {
+        if (traceCount(channel) == 0)
+            break;
+    }
+    return --channel;
 }
 
-double ScpiChannelInfo::frequencyCenter() const
+double ScpiChannelInfo::frequencyCenter(int channel) const
 {
-    return _session.frequencyCenter();
+    return _session.frequencyCenter(channel);
 }
 
-double ScpiChannelInfo::frequencySpan() const
+double ScpiChannelInfo::frequencySpan(int channel) const
 {
-    return _session.frequncySpan();
+    return _session.frequncySpan(channel);
 }
 
 bool ScpiChannelInfo::isReady() const
@@ -32,13 +37,13 @@ bool ScpiChannelInfo::isReady() const
     return _session.isReady();
 }
 
-QVector<int> ScpiChannelInfo::listPorts() const
+QVector<int> ScpiChannelInfo::listPorts(int channel) const
 {
-    QVector<int> ports;
+    QSet<int> ports;
 
     QRegExp rx("(\\d+)");
-    for (size_t trace = 1; trace <= traceCount(); ++trace) {
-        auto parameter = _session.measurementParameter(trace);
+    for (size_t trace = 1; trace <= traceCount(channel); ++trace) {
+        auto parameter = _session.measurementParameter(channel, trace);
         bool split = parameter[0] == 'S';
 
         int pos = 0;
@@ -46,57 +51,57 @@ QVector<int> ScpiChannelInfo::listPorts() const
             auto port = rx.cap(1);
             if (split) {
                 int leftDigits = port.size() / 2;
-                ports.push_back(port.left(leftDigits).toInt());
-                ports.push_back(port.right(port.size() - leftDigits).toInt());
+                ports.insert(port.left(leftDigits).toInt());
+                ports.insert(port.right(port.size() - leftDigits).toInt());
             } else {
-                ports.push_back(port.toInt());
+                ports.insert(port.toInt());
             }
 
             pos += rx.matchedLength();
         }
     }
 
-    return ports;
+    return QVector<int>(ports.cbegin(), ports.cend());
 }
 
-double ScpiChannelInfo::maxFrequency() const
+double ScpiChannelInfo::maxFrequency(int channel) const
 {
-    return _session.maxFrequency();
+    return _session.maxFrequency(channel);
 }
 
-double ScpiChannelInfo::maxPower() const
+double ScpiChannelInfo::maxPower(int channel) const
 {
-    return _session.maxPower();
+    return _session.maxPower(channel);
 }
 
-double ScpiChannelInfo::minFrequency() const
+double ScpiChannelInfo::minFrequency(int channel) const
 {
-    return _session.minFrequency();
+    return _session.minFrequency(channel);
 }
 
-double ScpiChannelInfo::minPower() const
+double ScpiChannelInfo::minPower(int channel) const
 {
-    return _session.minPower();
+    return _session.minPower(channel);
 }
 
-int ScpiChannelInfo::pointsCount() const
+int ScpiChannelInfo::pointsCount(int channel) const
 {
-    return _session.pointsCount();
+    return _session.pointsCount(channel);
 }
 
-double ScpiChannelInfo::power() const
+double ScpiChannelInfo::power(int channel) const
 {
-    return _session.power();
+    return _session.power(channel);
 }
 
-double ScpiChannelInfo::powerCenter() const
+double ScpiChannelInfo::powerCenter(int channel) const
 {
-    return _session.powerCenter();
+    return _session.powerCenter(channel);
 }
 
-double ScpiChannelInfo::powerSpan() const
+double ScpiChannelInfo::powerSpan(int channel) const
 {
-    return _session.powerSpan();
+    return _session.powerSpan(channel);
 }
 
 bool ScpiChannelInfo::rfOut() const
@@ -104,14 +109,14 @@ bool ScpiChannelInfo::rfOut() const
     return _session.rfOut();
 }
 
-SweepType ScpiChannelInfo::sweepType() const
+SweepType ScpiChannelInfo::sweepType(int channel) const
 {
-    return _sweepTypes[_session.sweepType()];
+    return _sweepTypes[_session.sweepType(channel)];
 }
 
-int ScpiChannelInfo::traceCount() const
+int ScpiChannelInfo::traceCount(int channel) const
 {
-    return _session.traceCount();
+    return _session.traceCount(channel);
 }
 
 TriggerMode ScpiChannelInfo::triggerMode() const
