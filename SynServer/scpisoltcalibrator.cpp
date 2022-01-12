@@ -43,8 +43,9 @@ void ScpiSoltCalibrator::measurePort(Measure measure, int channel, int port)
     _session.chooseCalibrationSubclass(channel, 1);
     _session.measurePort(_measureName[measure], channel, port);
 
-    qDebug() << _session.errorCode();
-    if (_session.errorCode() != 0)
+    const auto errorCode = _session.errorCode();
+    qDebug() << errorCode << '\n';
+    if (errorCode != 0)
         return;
 
     switch (measure) {

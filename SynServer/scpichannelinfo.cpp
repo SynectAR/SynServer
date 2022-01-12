@@ -14,7 +14,12 @@ CalibrationType ScpiChannelInfo::calibrationType(int channel) const
 
 int ScpiChannelInfo::channelCount() const
 {
-    return _layoutChannels[_session.channelLayout() - 1];
+    size_t channel;
+    for (channel = 1; channel <= 32; ++channel) {
+        if (traceCount(channel) == 0)
+            break;
+    }
+    return --channel;
 }
 
 double ScpiChannelInfo::frequencyCenter(int channel) const
