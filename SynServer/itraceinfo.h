@@ -29,10 +29,10 @@ class ITraceInfo : public QObject
 public:
     virtual ~ITraceInfo() = default;
 
-    virtual TraceFormat format() const = 0;
-    virtual int number() const = 0;
-    virtual QString measurementParameter() const = 0;
-    virtual double scale() const = 0;
+    virtual TraceFormat format(int channel, int trace) const = 0;
+    virtual int number(int channel) const = 0;
+    virtual QString measurementParameter(int channel, int trace) const = 0;
+    virtual double scale(int channel, int trace) const = 0;
 };
 
 #endif // ITRACEINFO_H

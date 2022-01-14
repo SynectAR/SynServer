@@ -19,30 +19,9 @@ Window {
         currentIndex: tabBar.currentIndex
 
         Rectangle {
-            Chart {
+            TraceChart {
                 objectName: "chart"
             }
-        }
-
-        Rectangle {
-            QRcode {
-            }
-        }
-    }
-
-    StackLayout {
-        width: parent.width
-        currentIndex: bar.currentIndex
-
-        Item {
-            id: homeTab
-        }
-
-        Item {
-            id: discoverTab
-        }
-        Item {
-            id: activityTab
         }
     }
 }

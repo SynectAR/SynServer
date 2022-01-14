@@ -8,12 +8,7 @@ import QtQuick.Layouts 1.15
 ChartView {
     anchors.fill: parent
     antialiasing: true
-
-    LineSeries {
-        objectName: "series"
-        name: "S11"
-        color: "black"
-    }
+    legend.alignment: Qt.AlignLeft
 
     Timer {
          id: refreshTimer
@@ -32,12 +27,21 @@ ChartView {
         RowLayout {
             Layout.alignment: Qt.AlignBottom | Qt.AlignRight
 
+            ComboBox {
+                model: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
+                onCurrentValueChanged: {
+                    chartControl.channel = currentValue
+                }
+            }
+
             Button {
                 font.pixelSize: 20
                 checkable: true
                 text: (checked ? "VNA on" : "VNA off")
                 onClicked: {
                     if (checked) {
+                        chartControl.initTraces();
+                        chartControl.initAxis();
                         chartControl.updateData();
                         refreshTimer.running = true;
                     }
@@ -70,7 +74,7 @@ ChartView {
             font.family: "Helvetica"
             //font.pointSize:  50
             font.pixelSize: 20
-            text: qsTr("IP address: ")
+            text: qsTr("") + server.serverAddress
             focus: true;
             selectByMouse: true
 
@@ -91,16 +95,17 @@ ChartView {
         width: parent.width/3 ;
         height: parent.height/16;
 
-        TextInput {
+        TextField {
             id: myText1
             anchors.centerIn: parent
             font.family: "Helvetica"
             //font.pointSize:  50
             font.pixelSize: 20
-            text: qsTr("Serial number: ") + calibrator.deviceInfo
+            text: qsTr("") + calibrator.deviceInfo
             focus: true;
             selectByMouse: true
-
+            width: parent.width;
+            height: parent.height;
             horizontalAlignment: Text.AlignHCenter
             cursorVisible: false
 
