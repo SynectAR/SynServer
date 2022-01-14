@@ -7,18 +7,18 @@
 #include <qrcodegen.hpp>
 
 #include <QApplication>
+#include <QCoreApplication>
+#include <QFile>
 #include <QQmlApplicationEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
+#include <QString>
+
 #include <climits>
-#include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <QFile>
-#include <QString>
-#include <QCoreApplication>
-
+#include <string>
 
 static std::string toSvgString(const qrcodegen::QrCode &qr, int border) {
     if (border < 0)
@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
     auto *chart = new ChartControl(chartObject, &app);
     context->setContextProperty("chartControl", chart);
 
+    /*
     auto measure = [&calibrator] (int port) {
         calibrator.measurePort(Measure::OPEN, 1, port);
         calibrator.measurePort(Measure::SHORT, 1, port);
@@ -118,6 +119,7 @@ int main(int argc, char *argv[])
     calibrator.measureThru(1, 4, 5);
 
     calibrator.apply(1);
+    */
 
     return app.exec();
 }

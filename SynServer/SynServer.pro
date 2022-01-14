@@ -43,10 +43,5 @@ HEADERS += \
 
 DISTFILES += \
     QRcode1.qml \
-    mai1n.qml \
-    mai1n.qml
-
-
-DISTFILES += \
-    QRcode1.qml \
-    mai1n.qml
+    main1.qml \
+    TraceChart1.qml \

@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Chart.qml</file>
+        <file>TraceChart.qml</file>
         <file>main.qml</file>
         <file>QRcode.qml</file>
         <file>svg_xml.svg</file>

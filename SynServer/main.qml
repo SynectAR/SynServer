@@ -19,7 +19,7 @@ Window {
         currentIndex: tabBar.currentIndex
 
         Rectangle {
-            Chart {
+            TraceChart {
                 objectName: "chart"
             }
         }
