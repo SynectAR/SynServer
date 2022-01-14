@@ -90,6 +90,9 @@ private:
     Status chooseSoltPorts(ServerContext* context,
                             const vnarpc::SoltPorts* request,
                             EmptyMessage* reply) override;
+    Status channelCount(ServerContext* context,
+                        const vnarpc::EmptyMessage* request,
+                        vnarpc::ChannelCount* reply) override;
 
 };
 

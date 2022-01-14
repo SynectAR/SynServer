@@ -73,6 +73,7 @@ Status VnaRpcServiceImpl::measureThru(grpc::ServerContext *context,
                                             const vnarpc::ThruParams *request,
                                             vnarpc::EmptyMessage *reply)
 {
+    qDebug() << request->srcport() << " " << request->rcvport();
     calibrator->measureThru(request->channel(), request->srcport(), request->rcvport());
     return Status::OK;
 }
@@ -196,8 +197,7 @@ Status VnaRpcServiceImpl::portList(grpc::ServerContext *context,
                                    const vnarpc::Channel *request,
                                    vnarpc::ActivePorts *reply)
 {
-    auto ports = channelInfo->listPorts(request->channel());
-    for (auto p : ports)
+    for (auto p : channelInfo->listPorts(request->channel()))
         reply->add_ports(p - 1);
     return Status::OK;
 }
@@ -211,6 +211,14 @@ Status VnaRpcServiceImpl::chooseSoltPorts(grpc::ServerContext *context,
         ports.append(port);
 
     calibrator->soltCalibration(request->channel(), ports);
+    return Status::OK;
+}
+
+Status VnaRpcServiceImpl::channelCount(grpc::ServerContext *context,
+                                       const vnarpc::EmptyMessage *request,
+                                       vnarpc::ChannelCount *reply)
+{
+    reply->set_count(channelInfo->channelCount());
     return Status::OK;
 }
 

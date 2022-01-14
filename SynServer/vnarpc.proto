@@ -28,6 +28,11 @@ service VnaRpc {
     rpc calibrationType (Channel) returns (CalibrationType) {}
     // список используемых портов в канале
     rpc portList (Channel) returns (ActivePorts) {}
+    rpc channelCount(EmptyMessage) returns (ChannelCount) {}
+}
+
+message ChannelCount {
+    int32 count = 1;
 }
 
 enum sweep_type {

@@ -34,7 +34,7 @@ public:
     void getPortStatus(int port);
     QPixmap vnaQR();
     void span();
-    void listPort();
+    void listPort(int channel);
 };
 
 #endif // RPCCLIENT_H

@@ -1,5 +1,6 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include <QDebug>
+#include <QNetworkInterface>
 #include <QPixmap>
 
 #include <grpcpp/grpcpp.h>
@@ -17,9 +18,18 @@ using vnarpc::MeasureParams;
 using vnarpc::VnaRpc;
 
 RpcClient::RpcClient(QObject* parent_)
-    : QObject(parent_)
-    , stub_(VnaRpc::NewStub(grpc::CreateChannel("192.168.1.85:50051",
-                                 grpc::InsecureChannelCredentials()))) {}
+    : QObject(parent_) {
+
+    QString _serverAddress;
+    for (auto &address : QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+            _serverAddress = address.toString();
+        }
+    }
+    _serverAddress += ":50051";
+    stub_ = VnaRpc::NewStub(grpc::CreateChannel(_serverAddress.toStdString(),
+                                                grpc::InsecureChannelCredentials()));
+}
 
 int RpcClient::getPortCount()
 {
@@ -35,12 +45,12 @@ int RpcClient::getPortCount()
     }
 }
 
-void RpcClient::listPort()
+void RpcClient::listPort(int channel)
 {
     vnarpc::Channel request;
     vnarpc::ActivePorts reply;
     ClientContext context;
-    request.set_channel(1);
+    request.set_channel(channel);
     Status status = stub_->portList(&context, request, &reply);
     for (auto p : reply.ports())
         qDebug() << p;

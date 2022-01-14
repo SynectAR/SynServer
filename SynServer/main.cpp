@@ -45,13 +45,12 @@ int main(int argc, char *argv[])
 
 
     engine.load(url);
-
+    qDebug() << calibrator.deviceInfo();
     ScpiChannelInfo channelInfo;
     RpcServer server(calibrator, channelInfo);
-
     //RpcClient client;
-    //client.listPort();
-
+    //client.listPort(1);
+   // qDebug() << channelInfo.channelCount();
     auto context = engine.rootContext();
     context->setContextProperty("server", &server);
     context->setContextProperty("calibrator", &calibrator);
